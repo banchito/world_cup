@@ -4,12 +4,11 @@ import { db } from '../firebase.config'
 import { toast } from 'react-toastify'
 import Spinner from '../components/Spinner'
 import MatchItem from '../components/MatchItem'
-import { ListItem } from '@mui/material'
 
 export default function Matches() {
   const [matches, setMatches] = useState(null)
   const [loading, setLoading] = useState(true)
-  console.log(matches)
+
   useEffect(() => {
     const fetchMatches = async () => {
       try {
@@ -17,7 +16,7 @@ export default function Matches() {
         const matchesRef = collection(db, 'matches')
 
         //create query
-        const q = query(matchesRef, orderBy('time', 'desc'), limit(10))
+        const q = query(matchesRef, orderBy('time'), limit(10))
 
         //execute query
         const querySnap = await getDocs(q)
