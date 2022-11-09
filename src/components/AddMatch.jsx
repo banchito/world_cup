@@ -73,13 +73,14 @@ function AddMatch() {
         querySnap.forEach((doc) => {
           //   return teams.push({ id: doc.id, data: doc.data() })
           let {
-            data: { country, flag_url, group },
+            data: { country, flag_url, group, sm_flag_url },
           } = { data: doc.data() }
 
           return teams.push({
             id: doc.id,
             label: capitalizeFirstLetter(country),
             flag_url,
+            sm_flag_url,
             group,
           })
         })
@@ -117,6 +118,9 @@ function AddMatch() {
                 ...prevState,
                 home_team_id: teamSelected ? teamSelected.id : null,
                 home_team_flag_url: teamSelected ? teamSelected.flag_url : null,
+                home_team_sm_flag_url: teamSelected
+                  ? teamSelected.sm_flag_url
+                  : null,
                 home_team_group: teamSelected ? teamSelected.group : null,
                 home_team: teamSelected ? teamSelected.label : null,
               }))
@@ -136,6 +140,9 @@ function AddMatch() {
                 ...prevState,
                 away_team_id: teamSelected ? teamSelected.id : null,
                 away_team_flag_url: teamSelected ? teamSelected.flag_url : null,
+                away_team_sm_flag_url: teamSelected
+                  ? teamSelected.sm_flag_url
+                  : null,
                 away_team_group: teamSelected ? teamSelected.group : null,
                 away_team: teamSelected ? teamSelected.label : null,
               }))
