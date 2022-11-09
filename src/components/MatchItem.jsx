@@ -28,18 +28,18 @@ function MatchItem({
   })
   return (
     <li className='categoryListing'>
-      <p className='categoryListingLocation'> Group: {group}</p>
-      <p className='categoryListingLocation'> {dateString}</p>
+      <p className='categoryListingName'> Group: {group}</p>
+      <p className='categoryListingName'> {dateString}</p>
 
       <div className=''>
         <img src={home_team_flag_url} alt='flag' />
-        <p className='categoryListingLocation'>{home_team}</p>
-        <p className='categoryListingLocation'>{home_team_goals}</p>
+        <p className='categoryListingName'>{home_team}</p>
+        <p className='categoryListingName'>{home_team_goals}</p>
       </div>
 
       <div className=''>
         <img src={away_team_flag_url} alt='flag' />
-        <p className='categoryListingLocation'>{away_team}</p>
+        <p className='categoryListingName'>{away_team}</p>
         <p className='categoryListingLocation'>{away_team_goals}</p>
       </div>
     </li>
