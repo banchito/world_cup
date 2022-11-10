@@ -80,20 +80,12 @@ export default function Matches() {
         {' '}
         <p className='pageHeader'>Explore Matches</p>
         <main>
-          {/* <div className='category'>
-            <header>
-              <p className='pageHeader'> 
-
-              </p>
-            </header>
-          </div> */}
           {loading ? (
             <Spinner />
           ) : matches && matches.length > 0 ? (
             <>
-              <main>
-                {/* className='categoryListings' */}
-                <ul>
+              <div className='categoryListings'>
+                <div className='scoreGrid'>
                   {matches.map((match) => (
                     <MatchItem
                       key={match.id}
@@ -101,8 +93,8 @@ export default function Matches() {
                       id={match.id}
                     />
                   ))}
-                </ul>
-              </main>
+                </div>
+              </div>
               {lastFetchedMatch && (
                 <p className='loadMore' onClick={onFetchMoreMatches}>
                   Load more

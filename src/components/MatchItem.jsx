@@ -19,36 +19,52 @@ function MatchItem({
     time,
   },
 }) {
-  //   console.log(home_team_sm_flag_url, home_team_flag_url)
   const options = {
     weekday: 'short',
-    month: 'long',
+    month: 'short',
     day: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
   }
-  let dateString = time.toDate().toLocaleDateString(undefined, options)
+  let dateString = time
+    .toDate()
+    .toLocaleDateString(undefined, options)
+    .replace(',', '')
+    .replace(',', '')
+
   return (
-    <li className='categoryListing'>
-      <div className='container'>
-          <div className="flags">
-            <img src={home_team_flag_url} alt='flag' />
-            <img src={away_team_flag_url} alt='flag' />
-          </div>
-            <div className="teams">
-              <p className='categoryListingLocation'>{home_team}</p>
-              <p className='categoryListingLocation'>{away_team}</p>
+    <div className='scoreCard'>
+      <div className='scoreCardHeader'>Group {group}</div>
+      <div className='scoreCardBody'>
+        <div className='scoreCardInfoGrid'>
+          <div className='test'>
+            <div className='teamInfo'>
+              <img
+                className='team_flag_img'
+                src={home_team_sm_flag_url}
+                alt='flag'
+              />
+              <p className='team_name'>{home_team}</p>
+              <p className='team_goals'>{home_team_goals}</p>
             </div>
-          <div className="score">
-            <p className='categoryListingLocation'>{home_team_goals}</p>
-            <p className='categoryListingLocation'>{away_team_goals}</p>
+            <div className='teamInfo'>
+              <img
+                className='team_flag_img'
+                src={away_team_sm_flag_url}
+                alt='flag'
+              />
+              <p className='team_name'>{away_team}</p>
+              <p className='team_goals'>{away_team_goals}</p>
+            </div>
           </div>
-          <div className='time'>
-            <p className='categoryListingLocation'> Group: {group}</p>
-            <p className='categoryListingLocation'> {dateString}</p>         
-          </div>         
-      </div>    
-    </li>
+          <div className='matchDateTime'>
+            <p>{dateString}</p>{' '}
+          </div>
+        </div>
+      </div>
+
+      <div className='scoreCardFooter'>footer</div>
+    </div>
   )
 }
 
