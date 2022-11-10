@@ -399,6 +399,61 @@ button {
   text-align: left;
 }
 
+/* Match Score card */
+
+.card{
+    display: flex;
+    align-items: center;
+    /* margin-top: 25%; */
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    font-size: .7rem;
+
+}
+
+.contenedor{
+    /* width: 400px;
+    height: 200%; */
+
+    border: 1px solid #3c4043;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.info{
+    display: flex;
+    /* width: 75%; */
+    justify-content: space-evenly;
+    text-align: center;
+    /* padding: 10px; */
+}
+
+
+.time{
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+    justify-content: center;
+    text-align: center;
+    border-left: 1px solid black;
+    padding: 5px;
+}
+
+.flags, .teams, .score{
+    display: flex;
+    flex-direction: column;
+    justify-content:space-between;
+    text-align: center;
+    padding: 0px;
+}
+
+.flag_url{
+    height: 25px;
+}
+
+/* End match score card */
 .category {
   margin-bottom: 10rem;
 }

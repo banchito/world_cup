@@ -92,7 +92,8 @@ export default function Matches() {
           ) : matches && matches.length > 0 ? (
             <>
               <main>
-                <ul className='categoryListings'>
+                {/* className='categoryListings' */}
+                <ul>
                   {matches.map((match) => (
                     <MatchItem
                       key={match.id}

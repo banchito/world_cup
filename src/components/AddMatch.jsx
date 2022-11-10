@@ -31,6 +31,8 @@ function AddMatch() {
     home_team_goals: 0,
   })
 
+  console.log(formData)
+
   const onSubmitAdmin = async (e) => {
     if (!formData.away_team_id || !formData.home_team_id || !formData.time)
       return toast.error(`provide all team's info`)
