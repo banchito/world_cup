@@ -29,44 +29,22 @@ function MatchItem({
   }
   let dateString = time.toDate().toLocaleDateString(undefined, options)
   return (
-    // <li className='categoryListing'>
-    //   <p className='categoryListingName'> Group: {group}</p>
-    //   <p className='categoryListingName'> {dateString}</p>
+    <li className='categoryListing'>
+      <p className='categoryListingName'> Group: {group}</p>
+      <p className='categoryListingName'> {dateString}</p>
 
-    //   <div className=''>
-    //     <img src={home_team_sm_flag_url} alt='flag' />
-    //     <p className='categoryListingName'>{home_team}</p>
-    //     <p className='categoryListingName'>{home_team_goals}</p>
-    //   </div>
-
-    //   <div className=''>
-    //     <img src={away_team_sm_flag_url} alt='flag' />
-    //     <p className='categoryListingName'>{away_team}</p>
-    //     <p className='categoryListingName'>{away_team_goals}</p>
-    //   </div>
-    // </li>
-    <section className='card'>
-      <div className='contenedor'>
-        <p className='categoryListingName'> Group: {group}</p>
-        <div className='info'>
-          <div className='flags'>
-            <img src={home_team_sm_flag_url} alt='flag' />
-            <img src={away_team_sm_flag_url} alt='flag' />
-          </div>
-          <div className='teams'>
-            <span>{home_team}</span>
-            <span>{away_team}</span>
-          </div>
-          <div className='score'>
-            <span>{home_team_goals}</span>
-            <span>{away_team_goals}</span>
-          </div>
-        </div>
-        <div className='time'>
-          <span>{dateString}</span>
-        </div>
+      <div className=''>
+        <img src={home_team_sm_flag_url} alt='flag' />
+        <p className='categoryListingName'>{home_team}</p>
+        <p className='categoryListingName'>{home_team_goals}</p>
       </div>
-    </section>
+
+      <div className=''>
+        <img src={away_team_sm_flag_url} alt='flag' />
+        <p className='categoryListingName'>{away_team}</p>
+        <p className='categoryListingName'>{away_team_goals}</p>
+      </div>
+    </li>
   )
 }
 
