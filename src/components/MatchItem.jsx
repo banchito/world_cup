@@ -30,20 +30,24 @@ function MatchItem({
   let dateString = time.toDate().toLocaleDateString(undefined, options)
   return (
     <li className='categoryListing'>
-      <p className='categoryListingName'> Group: {group}</p>
-      <p className='categoryListingName'> {dateString}</p>
-
-      <div className=''>
-        <img src={home_team_sm_flag_url} alt='flag' />
-        <p className='categoryListingName'>{home_team}</p>
-        <p className='categoryListingName'>{home_team_goals}</p>
-      </div>
-
-      <div className=''>
-        <img src={away_team_sm_flag_url} alt='flag' />
-        <p className='categoryListingName'>{away_team}</p>
-        <p className='categoryListingName'>{away_team_goals}</p>
-      </div>
+      <div className='container'>
+          <div className="flags">
+            <img src={home_team_flag_url} alt='flag' />
+            <img src={away_team_flag_url} alt='flag' />
+          </div>
+            <div className="teams">
+              <p className='categoryListingLocation'>{home_team}</p>
+              <p className='categoryListingLocation'>{away_team}</p>
+            </div>
+          <div className="score">
+            <p className='categoryListingLocation'>{home_team_goals}</p>
+            <p className='categoryListingLocation'>{away_team_goals}</p>
+          </div>
+          <div className='time'>
+            <p className='categoryListingLocation'> Group: {group}</p>
+            <p className='categoryListingLocation'> {dateString}</p>         
+          </div>         
+      </div>    
     </li>
   )
 }
