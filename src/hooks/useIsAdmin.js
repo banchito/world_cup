@@ -7,6 +7,9 @@ export const useIsAdmin = (uid) => {
   const isMounted = useRef(true)
 
   useEffect(() => {
+    if (!uid) {
+      return
+    }
     if (isMounted) {
       const getIsAdmin = async () => {
         const docRef = doc(db, 'users', uid)

@@ -19,14 +19,16 @@ function NavBar() {
           <li
             className='navbarListItem'
             style={
-              pathMatchRoute('/') ? { color: '#2c2c2c' } : { color: '#8f8f8f' }
+              pathMatchRoute('/bet-stats')
+                ? { color: '#2c2c2c' }
+                : { color: '#8f8f8f' }
             }
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/bet-stats')}
           >
             <ExploreIcon size='1.5em' />
             <p
               className={
-                pathMatchRoute('/')
+                pathMatchRoute('/bet-stats')
                   ? 'navbarListItemNameActive'
                   : 'navbarListItemName'
               }
@@ -37,16 +39,14 @@ function NavBar() {
           <li
             className='navbarListItem'
             style={
-              pathMatchRoute('/matches')
-                ? { color: '#2c2c2c' }
-                : { color: '#8f8f8f' }
+              pathMatchRoute('/') ? { color: '#2c2c2c' } : { color: '#8f8f8f' }
             }
-            onClick={() => navigate('/matches')}
+            onClick={() => navigate('/')}
           >
             <MatchesIcon size='1.5em' />
             <p
               className={
-                pathMatchRoute('/matches')
+                pathMatchRoute('/')
                   ? 'navbarListItemNameActive'
                   : 'navbarListItemName'
               }

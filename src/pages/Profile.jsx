@@ -85,6 +85,7 @@ function Profile() {
       [e.target.id]: e.target.value,
     }))
   }
+
   if (loading) {
     return <Spinner />
   }

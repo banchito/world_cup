@@ -1,9 +1,13 @@
 import { Link } from 'react-router-dom'
-
-// import bedIcon from '../assets/svg/badgeIcon.svg'
-// import bathtubIcon from '../assets/svg/bathtubIcon.svg'
+import { MdOutlineCasino } from 'react-icons/md'
+import { MdEdit } from 'react-icons/md'
+import { useIsAdmin } from '../hooks/useIsAdmin.js'
+import { getAuth } from 'firebase/auth'
+import { useAuthStatus } from '../hooks/useAuthStatus'
+import Spinner from './Spinner.jsx'
 
 function MatchItem({
+  id,
   match: {
     group,
     home_team,
@@ -19,6 +23,9 @@ function MatchItem({
     time,
   },
 }) {
+  const { loggedIn, checkingStatus } = useAuthStatus()
+  const { isAdmin } = useIsAdmin(getAuth().currentUser?.uid)
+
   const options = {
     weekday: 'short',
     month: 'short',
@@ -32,9 +39,21 @@ function MatchItem({
     .replace(',', '')
     .replace(',', '')
 
+  if (checkingStatus) {
+    return <Spinner />
+  }
   return (
     <div className='scoreCard'>
-      <div className='scoreCardHeader'>Group {group}</div>
+      <div className='scoreCardHeader'>
+        Group {group}
+        {loggedIn ? (
+          <Link to={`/create-bet/${id}`}>
+            <MdOutlineCasino size='2.5em' />
+          </Link>
+        ) : (
+          <Link to={`/sign-in`}>Sing-in</Link>
+        )}
+      </div>
       <div className='scoreCardBody'>
         <div className='scoreCardInfoGrid'>
           <div className='test'>
@@ -63,7 +82,7 @@ function MatchItem({
         </div>
       </div>
 
-      <div className='scoreCardFooter'>footer</div>
+      <div className='scoreCardFooter'>{isAdmin && <MdEdit size='1em' />}</div>
     </div>
   )
 }

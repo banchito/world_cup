@@ -9,20 +9,23 @@ import Profile from './pages/Profile'
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
 import ForgotPassword from './pages/ForgotPassword'
+import CreateBet from './pages/CreateBet'
 
 function App() {
   return (
     <>
       <Router>
         <Routes>
-          <Route path='/' element={<BetStats />} />
-          <Route path='/matches' element={<Matches />} />
+          <Route path='/' element={<Matches />} />
+          <Route path='/bet-stats' element={<BetStats />} />
+          {/* <Route path='/matches' element={<Matches />} /> */}
           <Route path='/profile' element={<PrivateRoute />}>
             <Route path='/profile' element={<Profile />} />
           </Route>
           <Route path='/sign-in' element={<SignIn />} />
           <Route path='/sign-up' element={<SignUp />} />
           <Route path='/forgot-password' element={<ForgotPassword />} />
+          <Route path='/create-bet/:matchId' element={<CreateBet />} />
         </Routes>
         <NavBar />
       </Router>
