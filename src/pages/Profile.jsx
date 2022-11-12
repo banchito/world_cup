@@ -91,113 +91,117 @@ function Profile() {
   }
 
   return (
-    <div className='profile'>
+    <>
       <header className='profileHeader'>
         <p className='pageHeader'>My Profile</p>
         <button type='button' onClick={onLogout} className='logOut'>
           Logout
         </button>
       </header>
-      <main>
-        <div className='profileDetailsHeader'>
-          <p className='profileDetailsText'>Personal Details</p>
-          <p
-            onClick={() => {
-              changeDetails && onSubmit()
-              setChangeDetails((prevState) => !prevState)
-            }}
-            className='changePersonalDetails'
-          >
-            {changeDetails ? 'done' : 'change'}
-          </p>
-        </div>
-        <div className='profileCard'>
-          <form>
-            <input
-              type='text'
-              id='name'
-              className={!changeDetails ? 'profileName' : 'profileNameActive'}
-              disabled={!changeDetails}
-              value={name}
-              onChange={onChange}
-            />
-            <input
-              type='text'
-              id='email'
-              className={!changeDetails ? 'profileEmail' : 'profileEmailActive'}
-              disabled={true}
-              value={email}
-              onChange={onChange}
-            />
-          </form>
-        </div>
+      <div className='profile'>
+        <main>
+          <div className='profileDetailsHeader'>
+            <p className='profileDetailsText'>Personal Details</p>
+            <p
+              onClick={() => {
+                changeDetails && onSubmit()
+                setChangeDetails((prevState) => !prevState)
+              }}
+              className='changePersonalDetails'
+            >
+              {changeDetails ? 'done' : 'change'}
+            </p>
+          </div>
+          <div className='profileCard'>
+            <form>
+              <input
+                type='text'
+                id='name'
+                className={!changeDetails ? 'profileName' : 'profileNameActive'}
+                disabled={!changeDetails}
+                value={name}
+                onChange={onChange}
+              />
+              <input
+                type='text'
+                id='email'
+                className={
+                  !changeDetails ? 'profileEmail' : 'profileEmailActive'
+                }
+                disabled={true}
+                value={email}
+                onChange={onChange}
+              />
+            </form>
+          </div>
 
-        {isAdmin && (
-          <>
-            <div className='profileDetailsHeader'>
-              <p className='profileDetailsText'>Teams</p>
-              <p
-                onClick={() => {
-                  setAddTeam((prevState) => !prevState)
-                }}
-                className='changePersonalDetails'
-              >
-                {addTeam ? 'done' : 'add Team'}
-              </p>
-            </div>
-            <div className='adminCard'>
-              <form>
-                <label>
-                  Country:
-                  <input
-                    type='text'
-                    id='country'
-                    className={!addTeam ? 'profileName' : 'profileNameActive'}
-                    disabled={!addTeam}
-                    value={country}
-                    onChange={onChangeAdmin}
-                  />
-                </label>
-                <label>
-                  Flag Url:
-                  <input
-                    type='text'
-                    id='flag_url'
-                    className={!addTeam ? 'profileName' : 'profileNameActive'}
-                    disabled={!addTeam}
-                    value={flag_url}
-                    onChange={onChangeAdmin}
-                  />
-                </label>
-                <label>
-                  Group:
-                  <input
-                    type='text'
-                    id='group'
-                    className={!addTeam ? 'profileName' : 'profileNameActive'}
-                    disabled={!addTeam}
-                    value={group}
-                    onChange={onChangeAdmin}
-                  />
-                </label>
-              </form>
-              {country && flag_url && group && (
-                <button
-                  onClick={onSubmitAdmin}
-                  disabled={!addTeam}
-                  className={
-                    country && flag_url && group ? 'submit' : 'submitDisabled'
-                  }
+          {isAdmin && (
+            <>
+              <div className='profileDetailsHeader'>
+                <p className='profileDetailsText'>Teams</p>
+                <p
+                  onClick={() => {
+                    setAddTeam((prevState) => !prevState)
+                  }}
+                  className='changePersonalDetails'
                 >
-                  Submit
-                </button>
-              )}
-            </div>
-            <AddMatch />
-          </>
-        )}
-      </main>
-    </div>
+                  {addTeam ? 'done' : 'add Team'}
+                </p>
+              </div>
+              <div className='adminCard'>
+                <form>
+                  <label>
+                    Country:
+                    <input
+                      type='text'
+                      id='country'
+                      className={!addTeam ? 'profileName' : 'profileNameActive'}
+                      disabled={!addTeam}
+                      value={country}
+                      onChange={onChangeAdmin}
+                    />
+                  </label>
+                  <label>
+                    Flag Url:
+                    <input
+                      type='text'
+                      id='flag_url'
+                      className={!addTeam ? 'profileName' : 'profileNameActive'}
+                      disabled={!addTeam}
+                      value={flag_url}
+                      onChange={onChangeAdmin}
+                    />
+                  </label>
+                  <label>
+                    Group:
+                    <input
+                      type='text'
+                      id='group'
+                      className={!addTeam ? 'profileName' : 'profileNameActive'}
+                      disabled={!addTeam}
+                      value={group}
+                      onChange={onChangeAdmin}
+                    />
+                  </label>
+                </form>
+                {country && flag_url && group && (
+                  <button
+                    onClick={onSubmitAdmin}
+                    disabled={!addTeam}
+                    className={
+                      country && flag_url && group ? 'submit' : 'submitDisabled'
+                    }
+                  >
+                    Submit
+                  </button>
+                )}
+              </div>
+              <AddMatch />
+            </>
+          )}
+        </main>
+      </div>
+    </>
   )
 }
 

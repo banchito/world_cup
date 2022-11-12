@@ -755,11 +755,15 @@ text-align: center;
 
 .profile {
   margin-bottom: 10rem;
+  display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .profileHeader {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
 }
 
