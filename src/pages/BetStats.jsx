@@ -3,9 +3,11 @@ export default function BetStats() {
     <h1 className='explore'>
       <header>
         {' '}
-        <p className='pageHeader'>BetStats </p>
+        <p className='pageHeader'>BetStats Cristian </p>
         <main></main>
       </header>
     </h1>
   )
 }
+
+
