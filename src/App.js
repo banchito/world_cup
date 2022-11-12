@@ -9,7 +9,6 @@ import Profile from './pages/Profile'
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
 import ForgotPassword from './pages/ForgotPassword'
-import CreateBet from './pages/CreateBet'
 
 function App() {
   return (
@@ -25,7 +24,6 @@ function App() {
           <Route path='/sign-in' element={<SignIn />} />
           <Route path='/sign-up' element={<SignUp />} />
           <Route path='/forgot-password' element={<ForgotPassword />} />
-          <Route path='/create-bet/:matchId' element={<CreateBet />} />
         </Routes>
         <NavBar />
       </Router>
