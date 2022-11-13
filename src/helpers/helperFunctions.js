@@ -5,3 +5,15 @@ export const capitalizeFirstLetter = (string) => {
 export const dateIsValid = (date) => {
   return date instanceof Date && !isNaN(date)
 }
+
+export const isNum = (number) => {
+  let isnum = /^\d+$/.test(number)
+  return isnum
+}
+
+export const isDraw = (homeScore, awayScore) => {
+  const scoreA = parseInt(homeScore)
+  const scoreB = parseInt(awayScore)
+
+  return scoreA === scoreB ? true : false
+}

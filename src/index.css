@@ -605,7 +605,6 @@ text-align: center;
 .teamInfoModal{
   width: 5rem;
   display: flex;
-  gap:1rem;
   align-items: center;
 }
 
@@ -915,6 +914,7 @@ text-align: center;
   padding: 1rem;
   box-shadow: rgba(0, 0, 0, 0.2);
   max-width: 500px;
+  margin-bottom: 2rem;
 }
 
 .adminCard{
@@ -956,6 +956,31 @@ text-align: center;
 }
 .profileNameActive {
   background-color: rgba(44, 44, 44, 0.1);
+}
+
+.homeScore,
+.awayScore,
+.editScoreActive{
+  all: unset;
+  font-weight: 600;
+  width: 1.5rem;
+  padding: 0;
+  -webkit-appearance: none;
+  margin: 0;
+  text-align: center;
+}
+
+.editScoreActive{
+  background-color: rgba(44, 44, 44, 0.1); 
+}
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
 }
 
 .profileEmail,

@@ -1,10 +1,12 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useEffect } from 'react'
+import { collection, getDocs, query } from 'firebase/firestore'
+import { db } from '../firebase.config'
+import { toast } from 'react-toastify'
 import { Link } from 'react-router-dom'
-import { MdOutlineCasino } from 'react-icons/md'
-import { MdEdit } from 'react-icons/md'
+import { MdOutlineCasino, MdEdit } from 'react-icons/md'
 import { useIsAdmin } from '../hooks/useIsAdmin.js'
-import { getAuth } from 'firebase/auth'
 import { useAuthStatus } from '../hooks/useAuthStatus'
+import { getAuth } from 'firebase/auth'
 import Spinner from './Spinner.jsx'
 import CreateBetModal from './CreateBetModal.jsx'
 
@@ -26,9 +28,11 @@ function MatchItem({
   },
 }) {
   const { loggedIn, checkingStatus } = useAuthStatus()
-  const { isAdmin } = useIsAdmin(getAuth().currentUser?.uid)
-  const [showModal, setShowModal] = useState(false)
-
+  const userId = getAuth().currentUser?.uid
+  const { isAdmin } = useIsAdmin(userId)
+  const [showModal, setShowModal] = useState(null)
+  const [existingBets, setExistingBets] = useState([])
+  console.log(existingBets)
   const options = {
     weekday: 'short',
     month: 'short',
@@ -50,6 +54,28 @@ function MatchItem({
     })
   }, [setShowModal, id])
 
+  //fix fetch MyBets
+  useEffect(() => {
+    const fetchMyBets = async () => {
+      try {
+        //Get reference to the collection
+        const betsRef = collection(db, 'user_bet')
+        //create query
+        const q = query(betsRef)
+        //execute query
+        const querySnap = await getDocs(q)
+        const bets = []
+        querySnap.forEach((doc) => {
+          return bets.push({ id: doc.id, data: doc.data() })
+        })
+        setExistingBets(bets)
+      } catch (error) {
+        toast.error('could not fetch matches')
+      }
+    }
+    fetchMyBets()
+  }, [])
+
   if (checkingStatus) {
     return <Spinner />
   }
@@ -62,8 +88,11 @@ function MatchItem({
           info={{
             home_team_sm_flag_url,
             home_team,
+            home_team_goals,
             away_team,
             away_team_sm_flag_url,
+            away_team_goals,
+            userId,
           }}
         />
       )}

@@ -44,7 +44,7 @@ function AddMatch() {
           : ''
       await addDoc(collection(db, 'matches'), formData)
       setLoading(false)
-      toast.success('Listing saved')
+      toast.success('Match saved')
       setFormData({
         is_draw: true,
         loser: '',
