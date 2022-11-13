@@ -7,6 +7,12 @@ html::-webkit-scrollbar {
   display: none;
 }
 
+.userItemsTable{
+  display: flex;
+  max-width: 750px;
+  margin-left: auto;
+  margin-right: auto;
+}
 body {
   font-family: 'Montserrat', sans-serif;
   background-color: #f2f4f8;
@@ -135,6 +141,7 @@ button {
 }
 
 .pageHeader {
+  text-align: center;
   font-size: 2rem;
   font-weight: 800;
 }

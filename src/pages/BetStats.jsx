@@ -4,6 +4,7 @@ import {
   getDocs,
   query,
   orderBy,
+  limit,
 } from 'firebase/firestore'
 import { db } from "../firebase.config";
 import { toast, Toast } from "react-toastify";
@@ -20,7 +21,7 @@ function Users(){
       try {
         const usersRef = collection(db, 'users')
 
-        const q = query(usersRef, orderBy('points', 'desc')) 
+        const q = query(usersRef, orderBy('points', 'desc'), limit(10)) 
 
         const querySnap = await getDocs(q)
 
@@ -42,7 +43,7 @@ function Users(){
     <h1>
       <header>
         {' '}
-        <p className='pageHeader'>BetStats</p>
+        <p className='pageHeader'>Standings</p>
         <main>
           {loading ? (<Spinner />) : users && users.length > 0 ? (
             <div>
