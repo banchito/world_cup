@@ -7,7 +7,7 @@ import {
   limit,
 } from 'firebase/firestore'
 import { db } from "../firebase.config";
-import { toast, Toast } from "react-toastify";
+import { toast } from 'react-toastify'
 import Spinner from "../components/Spinner";
 import UserItem from '../components/UserItem'
 

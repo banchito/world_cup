@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { getAuth, updateProfile } from 'firebase/auth'
 import {
   updateDoc,
@@ -13,6 +13,7 @@ import { toast } from 'react-toastify'
 import { useIsAdmin } from '../hooks/useIsAdmin'
 import Spinner from '../components/Spinner'
 import AddMatch from '../components/AddMatch'
+import { fetchUserBets } from '../helpers/helperFunctions.js'
 
 function Profile() {
   const auth = getAuth()
@@ -20,6 +21,7 @@ function Profile() {
   const [changeDetails, setChangeDetails] = useState(false)
   const [addTeam, setAddTeam] = useState(false)
   const [showMyBets, setShowMyBets] = useState(false)
+  const [myBets, setMybets] = useState([])
   const [adminFormData, setAdminFormData] = useState({
     country: '',
     flag_url: '',
@@ -89,6 +91,21 @@ function Profile() {
       [e.target.id]: e.target.value,
     }))
   }
+
+  useEffect(() => {
+    const getUserBets = async () => {
+      setLoading(true)
+      const bets = await fetchUserBets(auth.currentUser.uid)
+      if (bets === 'error') {
+        setLoading(false)
+        toast.error('Could not retrieve user bets')
+      }
+      setLoading(false)
+      setMybets(bets)
+    }
+    getUserBets()
+  }, [auth.currentUser.uid])
+  console.log(myBets)
 
   return (
     <>

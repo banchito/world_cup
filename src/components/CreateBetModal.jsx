@@ -12,6 +12,7 @@ import Spinner from '../components/Spinner'
 import { isDraw, isNum } from '../helpers/helperFunctions'
 
 export default function CreateBetModal({
+  existingBets,
   matchId,
   onClose,
   info: {

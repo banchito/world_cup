@@ -94,12 +94,12 @@ export default function Matches() {
                     />
                   ))}
                 </div>
+                {lastFetchedMatch && (
+                  <p className='loadMore' onClick={onFetchMoreMatches}>
+                    Load more
+                  </p>
+                )}
               </div>
-              {lastFetchedMatch && (
-                <p className='loadMore' onClick={onFetchMoreMatches}>
-                  Load more
-                </p>
-              )}
             </>
           ) : (
             <p>No matches to show</p>

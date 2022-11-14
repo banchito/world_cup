@@ -1,7 +1,7 @@
 import { useCallback, useState, useEffect } from 'react'
-import { collection, getDocs, query } from 'firebase/firestore'
-import { db } from '../firebase.config'
-import { toast } from 'react-toastify'
+// import { collection, getDocs, query, where, orderBy } from 'firebase/firestore'
+// import { db } from '../firebase.config'
+// import { toast } from 'react-toastify'
 import { Link } from 'react-router-dom'
 import { MdOutlineCasino, MdEdit } from 'react-icons/md'
 import { useIsAdmin } from '../hooks/useIsAdmin.js'
@@ -9,6 +9,7 @@ import { useAuthStatus } from '../hooks/useAuthStatus'
 import { getAuth } from 'firebase/auth'
 import Spinner from './Spinner.jsx'
 import CreateBetModal from './CreateBetModal.jsx'
+import { fetchUserBets } from '../helpers/helperFunctions.js'
 
 function MatchItem({
   id,
@@ -32,7 +33,8 @@ function MatchItem({
   const { isAdmin } = useIsAdmin(userId)
   const [showModal, setShowModal] = useState(null)
   const [existingBets, setExistingBets] = useState([])
-  console.log(existingBets)
+  const [loading, setLoading] = useState(false)
+
   const options = {
     weekday: 'short',
     month: 'short',
@@ -52,31 +54,20 @@ function MatchItem({
         setShowModal(null)
       },
     })
-  }, [setShowModal, id])
+  }, [setShowModal])
 
-  //fix fetch MyBets
   useEffect(() => {
-    const fetchMyBets = async () => {
-      try {
-        //Get reference to the collection
-        const betsRef = collection(db, 'user_bet')
-        //create query
-        const q = query(betsRef)
-        //execute query
-        const querySnap = await getDocs(q)
-        const bets = []
-        querySnap.forEach((doc) => {
-          return bets.push({ id: doc.id, data: doc.data() })
-        })
-        setExistingBets(bets)
-      } catch (error) {
-        toast.error('could not fetch matches')
-      }
-    }
-    fetchMyBets()
-  }, [])
+    const getUserBets = async () => {
+      setLoading(true)
+      const bets = await fetchUserBets(userId)
 
-  if (checkingStatus) {
+      setLoading(false)
+      setExistingBets(bets)
+    }
+    getUserBets()
+  }, [userId])
+
+  if (checkingStatus || loading) {
     return <Spinner />
   }
   return (
