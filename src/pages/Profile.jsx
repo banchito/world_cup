@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { getAuth, updateProfile } from 'firebase/auth'
 import {
   updateDoc,
@@ -14,6 +14,8 @@ import { useIsAdmin } from '../hooks/useIsAdmin'
 import Spinner from '../components/Spinner'
 import AddMatch from '../components/AddMatch'
 import UserContext from '../Context/UserContext'
+import BetCard from '../components/BetCard'
+import { fetchUserBets } from '../Context/UserActions'
 
 function Profile() {
   const { dispatch } = useContext(UserContext)
@@ -22,6 +24,7 @@ function Profile() {
   const [changeDetails, setChangeDetails] = useState(false)
   const [addTeam, setAddTeam] = useState(false)
   const [showMyBets, setShowMyBets] = useState(false)
+  const [userBets, setuserBets] = useState([])
   const [adminFormData, setAdminFormData] = useState({
     country: '',
     flag_url: '',
@@ -94,6 +97,14 @@ function Profile() {
     }))
   }
 
+  useEffect(() => {
+    const getUserBets = async () => {
+      const { bets } = await fetchUserBets(auth.currentUser.uid)
+      setuserBets(bets)
+    }
+    getUserBets()
+  }, [auth.currentUser.uid])
+
   return (
     <>
       {loading && <Spinner />}
@@ -153,8 +164,12 @@ function Profile() {
               </button>
 
               {showMyBets ? (
-                <div className='profileDetailsHeader'>
+                <div className='editBetSection'>
                   <p className='profileDetailsText'>My Bets</p>
+                  {userBets.length > 0 &&
+                    userBets.map((userbet) => (
+                      <BetCard key={userbet.id} data={userbet.data} />
+                    ))}
                 </div>
               ) : (
                 <>

@@ -75,7 +75,6 @@ export default function CreateBetModal({
   }
 
   useEffect(() => {
-    console.log('in effect', userId, matchId)
     const fetchUserBets = async () => {
       try {
         const betsRef = collection(db, 'user_bet')
@@ -96,7 +95,7 @@ export default function CreateBetModal({
     }
     fetchUserBets()
   }, [matchId, userId])
-  console.log(existingBet)
+
   return (
     <>
       {' '}
@@ -147,7 +146,7 @@ export default function CreateBetModal({
                     value={
                       existingBet.length > 0
                         ? existingBet[0].data.away_team_goals
-                        : home_score
+                        : away_score
                     }
                     maxLength='4'
                     onChange={onChange}
