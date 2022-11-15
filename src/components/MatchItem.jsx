@@ -1,13 +1,15 @@
-import { useCallback, useState, useContext } from 'react'
+import { useCallback, useState, useContext, useEffect } from 'react'
 // import { toast } from 'react-toastify'
 import { Link } from 'react-router-dom'
 import { MdOutlineCasino, MdEdit } from 'react-icons/md'
 import { useAuthStatus } from '../hooks/useAuthStatus'
-import UserContext from '../Context/UserContext.js'
+// import UserContext from '../Context/UserContext.js'
 import Spinner from './Spinner.jsx'
 import CreateBetModal from './CreateBetModal.jsx'
 
 function MatchItem({
+  matchId,
+  userId,
   isAdmin,
   match: {
     group,
@@ -22,17 +24,18 @@ function MatchItem({
     away_team_goals,
     away_team_id,
     time,
-    id,
   },
 }) {
-  const {
-    userId,
-    userBets: { bets },
-  } = useContext(UserContext)
+  // const {
+  //   userId,
+  //   userBets: { bets },
+  // } = useContext(UserContext)
   const { loggedIn, checkingStatus } = useAuthStatus()
   const [showModal, setShowModal] = useState(null)
-  const [isUpdateBet, setIsUpdateBet] = useState(false)
-
+  // const [isUpdateBet, setIsUpdateBet] = useState({})
+  // console.log('bets', bets)
+  // console.log('isUpdateBet', isUpdateBet)
+  // console.log(matchId)
   const options = {
     weekday: 'short',
     month: 'short',
@@ -54,15 +57,6 @@ function MatchItem({
     })
   }, [setShowModal])
 
-  // useEffect(() => {
-  //   console.log('in use effect')
-  //   setIsUpdateBet(
-  //     existingBets.map((existingBet) =>
-  //       existingBet.data.matchId.includes(matchId)
-  //     )
-  //   )
-  // }, [])
-
   if (checkingStatus) {
     return <Spinner />
   }
@@ -71,7 +65,7 @@ function MatchItem({
       {showModal && (
         <CreateBetModal
           onClose={showModal.onClose}
-          matchId={id}
+          matchId={matchId}
           info={{
             home_team_sm_flag_url,
             home_team,

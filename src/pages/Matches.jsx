@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import {
   collection,
   getDocs,
@@ -11,13 +11,17 @@ import { db } from '../firebase.config'
 import { toast } from 'react-toastify'
 import Spinner from '../components/Spinner'
 import MatchItem from '../components/MatchItem'
+// import UserContext from '../Context/UserContext.js'
 import { getAuth } from 'firebase/auth'
 import { useIsAdmin } from '../hooks/useIsAdmin.js'
+import { fetchUserBets } from '../Context/UserActions'
 
 export default function Matches() {
+  // const { userId } = useContext(UserContext)
   const [matches, setMatches] = useState(null)
   const [loading, setLoading] = useState(true)
   const [lastFetchedMatch, setLastFetchedMatch] = useState(null)
+  const [existingBets, setExistingBets] = useState([])
   const userId = getAuth().currentUser?.uid
   const { isAdmin } = useIsAdmin(userId)
 
@@ -49,6 +53,34 @@ export default function Matches() {
     fetchMatches()
   }, [])
 
+  useEffect(() => {
+    const getUserBets = async () => {
+      const { bets } = await fetchUserBets(userId)
+      setExistingBets(bets)
+    }
+    getUserBets()
+  }, [userId])
+
+  useEffect(() => {
+    if (!matches) return
+    // let bets = matches.filter((match) =>
+    //   existingBets.data.matchId.includes(match.id)
+    // )
+  }, [existingBets, matches])
+
+  // const addExistingBetState = (matches, bets) => {
+  //   console.log(matches, bets)
+
+  //   let existingBets = matches.filter((match) =>
+  //     bets.data.matchId.includes(match.id)
+  //   )
+  //   console.log(existingBets)
+  //   var pcNumbers = [1, 2, 3, 4, 5]
+  //   var userNumbers = [1, 2, 7, 8, 9]
+  //   var commonNumbers = pcNumbers.filter((i) => userNumbers.includes(i))
+  //   console.log(commonNumbers)
+  // }
+
   const onFetchMoreMatches = async () => {
     try {
       //Get reference to the collection
@@ -78,6 +110,14 @@ export default function Matches() {
     }
   }
 
+  // useEffect(() => {
+  //   if (bets.length > 0) {
+  //     setMatches(
+  //       bets.map((existingBet) => existingBet.data.matchId.includes(matchId))
+  //     )
+  //   }
+  // }, [userId])
+
   return (
     <>
       <h1 className='explore'>
@@ -100,6 +140,7 @@ export default function Matches() {
                       matchId={match.id}
                       match={match.data}
                       isAdmin={isAdmin}
+                      userId={userId}
                     />
                   ))}
                 </div>

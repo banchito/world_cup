@@ -2,11 +2,15 @@ import { useEffect } from 'react'
 import {
   doc,
   updateDoc,
+  getDocs,
+  query,
   addDoc,
   serverTimestamp,
   collection,
+  where,
 } from 'firebase/firestore'
 import { db } from '../firebase.config'
+import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import Spinner from '../components/Spinner'
@@ -26,6 +30,7 @@ export default function CreateBetModal({
   },
 }) {
   const [loading, setLoading] = useState(false)
+  const [existingBet, setExistingBet] = useState([])
   const [changeScore, setChangeScore] = useState(false)
   const [score, setScore] = useState({
     home_score: home_team_goals ? home_team_goals : 0,
@@ -69,6 +74,29 @@ export default function CreateBetModal({
     }))
   }
 
+  useEffect(() => {
+    console.log('in effect', userId, matchId)
+    const fetchUserBets = async () => {
+      try {
+        const betsRef = collection(db, 'user_bet')
+        const q = query(
+          betsRef,
+          where('userId', '==', userId),
+          where('matchId', '==', matchId)
+        )
+        const querySnap = await getDocs(q)
+        const result = []
+        querySnap.forEach((doc) => {
+          return result.push({ id: doc.id, data: doc.data() })
+        })
+        setExistingBet(result)
+      } catch (error) {
+        return 'error'
+      }
+    }
+    fetchUserBets()
+  }, [matchId, userId])
+  console.log(existingBet)
   return (
     <>
       {' '}
@@ -80,10 +108,9 @@ export default function CreateBetModal({
         >
           <div className='scoreCardModal'>
             <div className='scoreCardHeaderModal'>
-              {/* {isUpdateBet
-                ? 'update your bet on your profile'
-                : 'place your bet'} */}
-              Place Your Bet
+              {existingBet.length > 0
+                ? 'Update Bet On Profile'
+                : 'Place Your Bet'}
             </div>
             <div className='scoreCardBodyModal'>
               <div className='teamInfoModal'>
@@ -99,7 +126,11 @@ export default function CreateBetModal({
                     id='home_score'
                     className={!changeScore ? 'homeScore' : 'editScoreActive'}
                     disabled={!changeScore}
-                    value={home_score}
+                    value={
+                      existingBet.length > 0
+                        ? existingBet[0].data.home_team_goals
+                        : home_score
+                    }
                     maxLength='4'
                     onChange={onChange}
                   />
@@ -113,7 +144,11 @@ export default function CreateBetModal({
                     id='away_score'
                     className={!changeScore ? 'awayScore' : 'editScoreActive'}
                     disabled={!changeScore}
-                    value={away_score}
+                    value={
+                      existingBet.length > 0
+                        ? existingBet[0].data.away_team_goals
+                        : home_score
+                    }
                     maxLength='4'
                     onChange={onChange}
                   />
@@ -125,16 +160,22 @@ export default function CreateBetModal({
                 </div>
               </div>
             </div>
-            <button
-              type='button'
-              className='logOut'
-              onClick={() => {
-                changeScore && submitBet()
-                setChangeScore((prevState) => !prevState)
-              }}
-            >
-              {changeScore ? 'done' : 'Edit score '}
-            </button>
+            {existingBet.length > 0 ? (
+              <Link type='button' className='logOut' to='/profile'>
+                {'Go to Profile'}
+              </Link>
+            ) : (
+              <button
+                type='button'
+                className='logOut'
+                onClick={() => {
+                  changeScore && submitBet()
+                  setChangeScore((prevState) => !prevState)
+                }}
+              >
+                {changeScore ? 'done' : 'Edit score '}
+              </button>
+            )}
           </div>
         </div>
       </div>

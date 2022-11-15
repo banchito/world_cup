@@ -37,20 +37,16 @@ function SignIn() {
 
       if (userCredentail.user) {
         dispatch({ type: 'GET_USER_ID', payload: userCredentail.user.uid })
-        getUserBets(userCredentail.user.uid)
+
+        dispatch({
+          type: 'GET_USER_BETS',
+          payload: await fetchUserBets(userCredentail.user.uid),
+        })
         navigate('/')
       }
     } catch (error) {
       toast.error('Bad User Credentials')
     }
-  }
-  const getUserBets = async (userId) => {
-    const bets = await fetchUserBets(userId)
-    console.log(bets)
-    if (bets === 'error') {
-      toast.error('Could not retrieve user bets')
-    }
-    dispatch({ type: 'GET_USER_BETS', payload: bets })
   }
   return (
     <>

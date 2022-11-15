@@ -33,20 +33,16 @@ function OAuth() {
         })
       }
       dispatch({ type: 'GET_USER_ID', payload: user.uid })
-      getUserBets(user.uid)
+      dispatch({
+        type: 'GET_USER_BETS',
+        payload: await fetchUserBets(user.uid),
+      })
       navigate('/')
     } catch (error) {
       toast.error('could not authorize with Google')
     }
   }
 
-  const getUserBets = async (userId) => {
-    const bets = await fetchUserBets(userId)
-    if (bets === 'error') {
-      toast.error('Could not retrieve user bets')
-    }
-    dispatch({ type: 'GET_USER_BETS', payload: bets })
-  }
   return (
     <div className='socialLogin'>
       <p>Sign {location.pathname === '/sign-up' ? 'up' : 'in'} with </p>
