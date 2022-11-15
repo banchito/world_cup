@@ -11,11 +11,15 @@ import { db } from '../firebase.config'
 import { toast } from 'react-toastify'
 import Spinner from '../components/Spinner'
 import MatchItem from '../components/MatchItem'
+import { getAuth } from 'firebase/auth'
+import { useIsAdmin } from '../hooks/useIsAdmin.js'
 
 export default function Matches() {
   const [matches, setMatches] = useState(null)
   const [loading, setLoading] = useState(true)
   const [lastFetchedMatch, setLastFetchedMatch] = useState(null)
+  const userId = getAuth().currentUser?.uid
+  const { isAdmin } = useIsAdmin(userId)
 
   useEffect(() => {
     const fetchMatches = async () => {
@@ -24,7 +28,7 @@ export default function Matches() {
         const matchesRef = collection(db, 'matches')
 
         //create query
-        const q = query(matchesRef, orderBy('time'), limit(10))
+        const q = query(matchesRef, orderBy('time'), limit(5))
 
         //execute query
         const querySnap = await getDocs(q)
@@ -75,10 +79,14 @@ export default function Matches() {
   }
 
   return (
-    <h1 className='explore'>
-      <header>
-        {' '}
-        <p className='pageHeader'>Explore Matches</p>
+    <>
+      <h1 className='explore'>
+        <header>
+          {' '}
+          <p className='pageHeader'>Explore Matches</p>
+        </header>
+      </h1>
+      <div className='explore pageHeader'>
         <main>
           {loading ? (
             <Spinner />
@@ -89,8 +97,9 @@ export default function Matches() {
                   {matches.map((match) => (
                     <MatchItem
                       key={match.id}
+                      matchId={match.id}
                       match={match.data}
-                      id={match.id}
+                      isAdmin={isAdmin}
                     />
                   ))}
                 </div>
@@ -105,7 +114,7 @@ export default function Matches() {
             <p>No matches to show</p>
           )}
         </main>
-      </header>
-    </h1>
+      </div>
+    </>
   )
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useContext } from 'react'
 import { getAuth, updateProfile } from 'firebase/auth'
 import {
   updateDoc,
@@ -13,15 +13,15 @@ import { toast } from 'react-toastify'
 import { useIsAdmin } from '../hooks/useIsAdmin'
 import Spinner from '../components/Spinner'
 import AddMatch from '../components/AddMatch'
-import { fetchUserBets } from '../helpers/helperFunctions.js'
+import UserContext from '../Context/UserContext'
 
 function Profile() {
+  const { dispatch } = useContext(UserContext)
   const auth = getAuth()
   const [loading, setLoading] = useState(false)
   const [changeDetails, setChangeDetails] = useState(false)
   const [addTeam, setAddTeam] = useState(false)
   const [showMyBets, setShowMyBets] = useState(false)
-  const [myBets, setMybets] = useState([])
   const [adminFormData, setAdminFormData] = useState({
     country: '',
     flag_url: '',
@@ -39,6 +39,8 @@ function Profile() {
 
   const onLogout = () => {
     auth.signOut()
+    dispatch({ type: 'GET_USER_ID', payload: '' })
+    dispatch({ type: 'GET_USER_BETS', payload: [] })
     navigate('/')
   }
 
@@ -91,21 +93,6 @@ function Profile() {
       [e.target.id]: e.target.value,
     }))
   }
-
-  useEffect(() => {
-    const getUserBets = async () => {
-      setLoading(true)
-      const bets = await fetchUserBets(auth.currentUser.uid)
-      if (bets === 'error') {
-        setLoading(false)
-        toast.error('Could not retrieve user bets')
-      }
-      setLoading(false)
-      setMybets(bets)
-    }
-    getUserBets()
-  }, [auth.currentUser.uid])
-  console.log(myBets)
 
   return (
     <>

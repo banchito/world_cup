@@ -26,5 +26,5 @@ export const useIsAdmin = (uid) => {
     }
   }, [isMounted, uid])
 
-  return { isAdmin }
+  return { isAdmin, uid }
 }

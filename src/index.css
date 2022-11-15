@@ -426,6 +426,7 @@ button {
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-auto-rows: auto;
   align-items: flex-start;
+  margin-bottom: 5rem;
 }
 
 @media (max-width: 850px) {
@@ -506,6 +507,7 @@ button {
   .scoreCardInfoGrid{
     display: flex;
     flex-direction: column;
+    
   }
 }
 
@@ -535,18 +537,20 @@ button {
   align-items: center;
 }
 
-@media (max-width: 345px) {
+
+
+@media (max-width: 350px) {
   .teamInfo{
     width: 7rem;
-   column-gap: .4rem;
-   font-size: .7rem;
+    column-gap: .4rem;
+    font-size: .8rem;
   }
 }
 
-@media (max-width: 230px) {
+@media (max-width: 320px) {
   .teamInfo{
-     display: flex;
-   flex-direction: column;
+    display: flex;
+    flex-direction: column;
   }
 }
 
@@ -580,6 +584,11 @@ grid-row: 1/3;
 text-align: end;
 }
 
+@media (max-width: 450px) {
+  .matchDateTime{
+     text-align: center;
+  }
+}
 .backgroundOverlay{
   position: fixed;
   top: 0;
@@ -598,6 +607,7 @@ text-align: end;
   box-shadow: 2px 2px 4px 2px rgba(0, 0, 0, 0.2);
   border-radius: 5px;
   padding: 10px;
+  width: 400px;
   max-width: 420px;
   box-sizing: border-box;
   max-height: 90%;
@@ -611,7 +621,9 @@ text-align: end;
 }
 
 .teamInfoModal{
-  width: 5rem;
+  width: 9rem;
+
+  flex-direction: column;
   display: flex;
   align-items: center;
 }
@@ -645,11 +657,15 @@ text-align: end;
   justify-content: center;
   gap:1rem;
 }
-/* .modalButtonsContainer{
+
+.teamNameModal{
+align-self: center;
+}
+
+.flagScoreContainerModal{
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
-} */
+}
 /* score cards */
 
 .categoryListing {
@@ -725,7 +741,6 @@ text-align: end;
 .loadMore {
   cursor: pointer;
   width: 8rem;
-  margin: 0 auto;
   text-align: center;
   padding: 0.25rem 0.5rem;
   background-color: #000000;
@@ -735,6 +750,7 @@ text-align: end;
   opacity: 0.7;
   margin-top: 2rem;
   font-size: .8rem;
+  margin-bottom: 7rem;
 }
 
 .listingDetails {
@@ -864,6 +880,14 @@ text-align: end;
   margin-bottom: 0.5rem;
 }
 
+.profileContainer{
+  display: flex;
+  flex-direction: column;
+  /* max-width: 750px; */
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .profile {
   margin-bottom: 10rem;
   display: flex;
@@ -903,8 +927,15 @@ text-align: end;
 .profileDetailsHeader {
   display: flex;
   justify-content: space-between;
-  max-width: 500px;
+  max-width: 400px;
 }
+
+/* @media (min-width: 380) {
+  .profileDetailsHeader {
+    justify-content: space-around;
+  }
+} */
+
 
 .personalDetailsText {
   font-weight: 600;
@@ -921,8 +952,13 @@ text-align: end;
   border-radius: 1rem;
   padding: 1rem;
   box-shadow: rgba(0, 0, 0, 0.2);
-  max-width: 500px;
+  max-width: 400px;
   margin-bottom: 2rem;
+}
+@media (min-width: 380) {
+  .profileCard {
+    max-width: 350px;
+  }
 }
 
 .adminCard{
@@ -930,13 +966,19 @@ text-align: end;
   border-radius: 1rem;
   padding: 1rem;
   box-shadow: rgba(0, 0, 0, 0.2);
-  max-width: 500px;
+  max-width: 400px;
   
 }
 
 .addTeamAdmin{
   display:flex;
   justify-content: flex-end;
+}
+
+@media (min-width: 380) {
+  .addTeamAdmin {
+    max-width: 350px;
+  }
 }
 
 .addMatchForm{

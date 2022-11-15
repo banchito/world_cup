@@ -1,18 +1,14 @@
-import { useCallback, useState, useEffect } from 'react'
-// import { collection, getDocs, query, where, orderBy } from 'firebase/firestore'
-// import { db } from '../firebase.config'
+import { useCallback, useState, useContext } from 'react'
 // import { toast } from 'react-toastify'
 import { Link } from 'react-router-dom'
 import { MdOutlineCasino, MdEdit } from 'react-icons/md'
-import { useIsAdmin } from '../hooks/useIsAdmin.js'
 import { useAuthStatus } from '../hooks/useAuthStatus'
-import { getAuth } from 'firebase/auth'
+import UserContext from '../Context/UserContext.js'
 import Spinner from './Spinner.jsx'
 import CreateBetModal from './CreateBetModal.jsx'
-import { fetchUserBets } from '../helpers/helperFunctions.js'
 
 function MatchItem({
-  id,
+  isAdmin,
   match: {
     group,
     home_team,
@@ -26,14 +22,16 @@ function MatchItem({
     away_team_goals,
     away_team_id,
     time,
+    id,
   },
 }) {
+  const {
+    userId,
+    userBets: { bets },
+  } = useContext(UserContext)
   const { loggedIn, checkingStatus } = useAuthStatus()
-  const userId = getAuth().currentUser?.uid
-  const { isAdmin } = useIsAdmin(userId)
   const [showModal, setShowModal] = useState(null)
-  const [existingBets, setExistingBets] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [isUpdateBet, setIsUpdateBet] = useState(false)
 
   const options = {
     weekday: 'short',
@@ -56,18 +54,16 @@ function MatchItem({
     })
   }, [setShowModal])
 
-  useEffect(() => {
-    const getUserBets = async () => {
-      setLoading(true)
-      const bets = await fetchUserBets(userId)
+  // useEffect(() => {
+  //   console.log('in use effect')
+  //   setIsUpdateBet(
+  //     existingBets.map((existingBet) =>
+  //       existingBet.data.matchId.includes(matchId)
+  //     )
+  //   )
+  // }, [])
 
-      setLoading(false)
-      setExistingBets(bets)
-    }
-    getUserBets()
-  }, [userId])
-
-  if (checkingStatus || loading) {
+  if (checkingStatus) {
     return <Spinner />
   }
   return (

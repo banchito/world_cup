@@ -1,12 +1,15 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { toast } from 'react-toastify'
 import { Link, useNavigate } from 'react-router-dom'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { ReactComponent as ArrowRightIcon } from '../assets/svg/keyboardArrowRightIcon.svg'
 import visibilityIcon from '../assets/svg/visibilityIcon.svg'
 import OAuth from '../components/OAuth'
+import UserContext from '../Context/UserContext'
+import { fetchUserBets } from '../Context/UserActions'
 
 function SignIn() {
+  const { dispatch } = useContext(UserContext)
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
     email: '',
@@ -31,12 +34,23 @@ function SignIn() {
         email,
         password
       )
+
       if (userCredentail.user) {
+        dispatch({ type: 'GET_USER_ID', payload: userCredentail.user.uid })
+        getUserBets(userCredentail.user.uid)
         navigate('/')
       }
     } catch (error) {
       toast.error('Bad User Credentials')
     }
+  }
+  const getUserBets = async (userId) => {
+    const bets = await fetchUserBets(userId)
+    console.log(bets)
+    if (bets === 'error') {
+      toast.error('Could not retrieve user bets')
+    }
+    dispatch({ type: 'GET_USER_BETS', payload: bets })
   }
   return (
     <>

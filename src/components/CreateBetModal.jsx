@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import {
   doc,
   updateDoc,
@@ -12,7 +13,6 @@ import Spinner from '../components/Spinner'
 import { isDraw, isNum } from '../helpers/helperFunctions'
 
 export default function CreateBetModal({
-  existingBets,
   matchId,
   onClose,
   info: {
@@ -31,9 +31,7 @@ export default function CreateBetModal({
     home_score: home_team_goals ? home_team_goals : 0,
     away_score: away_team_goals ? away_team_goals : 0,
   })
-
   const { home_score, away_score } = score
-
   const submitBet = async () => {
     if (!isNum(score.home_score) || !isNum(score.away_score)) {
       setChangeScore((prevState) => !prevState)
@@ -81,39 +79,50 @@ export default function CreateBetModal({
           onMouseDown={(e) => e.stopPropagation()}
         >
           <div className='scoreCardModal'>
-            <div className='scoreCardHeaderModal'>place your bet</div>
+            <div className='scoreCardHeaderModal'>
+              {/* {isUpdateBet
+                ? 'update your bet on your profile'
+                : 'place your bet'} */}
+              Place Your Bet
+            </div>
             <div className='scoreCardBodyModal'>
               <div className='teamInfoModal'>
-                <img
-                  className='team_flag_img'
-                  src={home_team_sm_flag_url}
-                  alt='flag'
-                />
-                <input
-                  type='number'
-                  id='home_score'
-                  className={!changeScore ? 'homeScore' : 'editScoreActive'}
-                  disabled={!changeScore}
-                  value={home_score}
-                  maxLength='4'
-                  onChange={onChange}
-                />
+                <p className='teamNameModal'>{home_team}</p>
+                <div className='flagScoreContainerModal'>
+                  <img
+                    className='team_flag_img'
+                    src={home_team_sm_flag_url}
+                    alt='flag'
+                  />
+                  <input
+                    type='number'
+                    id='home_score'
+                    className={!changeScore ? 'homeScore' : 'editScoreActive'}
+                    disabled={!changeScore}
+                    value={home_score}
+                    maxLength='4'
+                    onChange={onChange}
+                  />
+                </div>
               </div>
               <div className='teamInfoModal'>
-                <input
-                  type='number'
-                  id='away_score'
-                  className={!changeScore ? 'awayScore' : 'editScoreActive'}
-                  disabled={!changeScore}
-                  value={away_score}
-                  maxLength='4'
-                  onChange={onChange}
-                />
-                <img
-                  className='team_flag_img'
-                  src={away_team_sm_flag_url}
-                  alt='flag'
-                />
+                <p className='teamNameModal'>{away_team}</p>
+                <div className='flagScoreContainerModal'>
+                  <input
+                    type='number'
+                    id='away_score'
+                    className={!changeScore ? 'awayScore' : 'editScoreActive'}
+                    disabled={!changeScore}
+                    value={away_score}
+                    maxLength='4'
+                    onChange={onChange}
+                  />
+                  <img
+                    className='team_flag_img'
+                    src={away_team_sm_flag_url}
+                    alt='flag'
+                  />
+                </div>
               </div>
             </div>
             <button
