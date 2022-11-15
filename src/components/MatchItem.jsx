@@ -1,9 +1,7 @@
-import { useCallback, useState, useContext, useEffect } from 'react'
-// import { toast } from 'react-toastify'
+import { useCallback, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { MdOutlineCasino, MdEdit } from 'react-icons/md'
 import { useAuthStatus } from '../hooks/useAuthStatus'
-// import UserContext from '../Context/UserContext.js'
 import Spinner from './Spinner.jsx'
 import CreateBetModal from './CreateBetModal.jsx'
 
@@ -26,16 +24,8 @@ function MatchItem({
     time,
   },
 }) {
-  // const {
-  //   userId,
-  //   userBets: { bets },
-  // } = useContext(UserContext)
   const { loggedIn, checkingStatus } = useAuthStatus()
   const [showModal, setShowModal] = useState(null)
-  // const [isUpdateBet, setIsUpdateBet] = useState({})
-  // console.log('bets', bets)
-  // console.log('isUpdateBet', isUpdateBet)
-  // console.log(matchId)
   const options = {
     weekday: 'short',
     month: 'short',
@@ -68,10 +58,12 @@ function MatchItem({
           matchId={matchId}
           info={{
             home_team_sm_flag_url,
+            home_team_id,
             home_team,
             home_team_goals,
             away_team,
             away_team_sm_flag_url,
+            away_team_id,
             away_team_goals,
             userId,
           }}

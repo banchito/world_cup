@@ -168,7 +168,12 @@ function Profile() {
                   <p className='profileDetailsText'>My Bets</p>
                   {userBets.length > 0 &&
                     userBets.map((userbet) => (
-                      <BetCard key={userbet.id} data={userbet.data} />
+                      <BetCard
+                        key={userbet.id}
+                        id={userbet.id}
+                        setLoading={setLoading}
+                        data={userbet.data}
+                      />
                     ))}
                 </div>
               ) : (

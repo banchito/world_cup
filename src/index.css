@@ -931,13 +931,6 @@ align-self: center;
   max-width: 400px;
 }
 
-/* @media (min-width: 380) {
-  .profileDetailsHeader {
-    justify-content: space-around;
-  }
-} */
-
-
 .personalDetailsText {
   font-weight: 600;
 }

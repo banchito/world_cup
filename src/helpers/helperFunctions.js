@@ -11,9 +11,20 @@ export const isNum = (number) => {
   return isnum
 }
 
-export const isDraw = (homeScore, awayScore) => {
+export const matchResult = (
+  homeScore,
+  awayScore,
+  away_team_id,
+  home_team_id
+) => {
   const scoreA = parseInt(homeScore)
   const scoreB = parseInt(awayScore)
 
-  return scoreA === scoreB ? true : false
+  if (scoreA === scoreB) return { isDraw: true, loser: '', winner: '' }
+  if (scoreA > scoreB)
+    return { isDraw: false, loser: away_team_id, winner: home_team_id }
+  if (scoreA < scoreB)
+    return { isDraw: false, loser: home_team_id, winner: away_team_id }
 }
+
+

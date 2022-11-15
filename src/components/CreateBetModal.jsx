@@ -1,7 +1,5 @@
 import { useEffect } from 'react'
 import {
-  doc,
-  updateDoc,
   getDocs,
   query,
   addDoc,
@@ -14,16 +12,18 @@ import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import Spinner from '../components/Spinner'
-import { isDraw, isNum } from '../helpers/helperFunctions'
+import { matchResult, isNum } from '../helpers/helperFunctions'
 
 export default function CreateBetModal({
   matchId,
   onClose,
   info: {
+    away_team_id,
     away_team,
     away_team_goals,
     away_team_sm_flag_url,
     home_team,
+    home_team_id,
     home_team_goals,
     home_team_sm_flag_url,
     userId,
@@ -42,15 +42,25 @@ export default function CreateBetModal({
       setChangeScore((prevState) => !prevState)
       return toast.error(`provide a valid score`)
     }
-
     setLoading(true)
-    const draw = isDraw(home_score, away_score)
+    const result = matchResult(
+      home_score,
+      away_score,
+      away_team_id,
+      home_team_id
+    )
 
     try {
       const betInfo = {
+        away_team_id,
+        home_team_id,
+        away_team_sm_flag_url,
         away_team_goals: away_score,
         away_team,
-        is_draw: draw,
+        is_draw: result.isDraw,
+        winner: result.winner,
+        loser: result.loser,
+        home_team_sm_flag_url,
         home_team_goals: home_score,
         home_team,
         matchId,
