@@ -107,14 +107,15 @@ function Profile() {
 
   return (
     <>
-      {loading && <Spinner />}
-      <header className='profileHeader'>
-        <p className='pageHeader'>My Profile</p>
-        <button type='button' onClick={onLogout} className='logOut'>
-          Logout
-        </button>
-      </header>
       <div className='profile'>
+        {loading && <Spinner />}
+        <header className='profileHeader'>
+          <p className='pageHeader'>My Profile</p>
+          <button type='button' onClick={onLogout} className='logOut'>
+            Logout
+          </button>
+        </header>
+
         <main>
           <div className='profileDetailsHeader'>
             <p className='profileDetailsText'>Personal Details</p>
@@ -150,104 +151,91 @@ function Profile() {
               />
             </form>
           </div>
-
           {isAdmin && (
-            <>
-              <button
-                type='button'
-                className='logOut'
-                onClick={() => {
-                  setShowMyBets((prevState) => !prevState)
-                }}
-              >
-                {showMyBets ? 'Show Admin' : 'Show my bets'}
-              </button>
+            <button
+              type='button'
+              className='logOut'
+              onClick={() => {
+                setShowMyBets((prevState) => !prevState)
+              }}
+            >
+              {showMyBets ? 'Show my bets' : 'Show Admin'}
+            </button>
+          )}
 
-              {showMyBets ? (
-                <div className='editBetSection'>
-                  <p className='profileDetailsText'>My Bets</p>
-                  {userBets.length > 0 &&
-                    userBets.map((userbet) => (
-                      <BetCard
-                        key={userbet.id}
-                        id={userbet.id}
-                        setLoading={setLoading}
-                        data={userbet.data}
-                      />
-                    ))}
-                </div>
-              ) : (
-                <>
-                  <div className='profileDetailsHeader'>
-                    <p className='profileDetailsText'>Teams</p>
-                    <p
-                      onClick={() => {
-                        setAddTeam((prevState) => !prevState)
-                      }}
-                      className='changePersonalDetails'
-                    >
-                      {addTeam ? 'done' : 'add Team'}
-                    </p>
-                  </div>
-                  <div className='adminCard'>
-                    <form>
-                      <label>
-                        Country:
-                        <input
-                          type='text'
-                          id='country'
-                          className={
-                            !addTeam ? 'profileName' : 'profileNameActive'
-                          }
-                          disabled={!addTeam}
-                          value={country}
-                          onChange={onChangeAdmin}
-                        />
-                      </label>
-                      <label>
-                        Flag Url:
-                        <input
-                          type='text'
-                          id='flag_url'
-                          className={
-                            !addTeam ? 'profileName' : 'profileNameActive'
-                          }
-                          disabled={!addTeam}
-                          value={flag_url}
-                          onChange={onChangeAdmin}
-                        />
-                      </label>
-                      <label>
-                        Group:
-                        <input
-                          type='text'
-                          id='group'
-                          className={
-                            !addTeam ? 'profileName' : 'profileNameActive'
-                          }
-                          disabled={!addTeam}
-                          value={group}
-                          onChange={onChangeAdmin}
-                        />
-                      </label>
-                    </form>
-                    {country && flag_url && group && (
-                      <button
-                        onClick={onSubmitAdmin}
-                        disabled={!addTeam}
-                        className={
-                          country && flag_url && group
-                            ? 'submit'
-                            : 'submitDisabled'
-                        }
-                      >
-                        Submit
-                      </button>
-                    )}
-                  </div>
-                  <AddMatch />
-                </>
-              )}
+          <div className='editBetSection'>
+            <p className='personalDetailsText'>My Bets</p>
+            {userBets.length > 0 &&
+              userBets.map((userbet) => (
+                <BetCard
+                  key={userbet.id}
+                  id={userbet.id}
+                  setLoading={setLoading}
+                  data={userbet.data}
+                />
+              ))}
+          </div>
+          {isAdmin && showMyBets && (
+            <>
+              <div className='profileDetailsHeader'>
+                <p
+                  onClick={() => {
+                    setAddTeam((prevState) => !prevState)
+                  }}
+                  className='changePersonalDetails'
+                >
+                  {addTeam ? 'done' : 'add Team'}
+                </p>
+              </div>
+              <div className='adminCard'>
+                <form>
+                  <label>
+                    Country:
+                    <input
+                      type='text'
+                      id='country'
+                      className={!addTeam ? 'profileName' : 'profileNameActive'}
+                      disabled={!addTeam}
+                      value={country}
+                      onChange={onChangeAdmin}
+                    />
+                  </label>
+                  <label>
+                    Flag Url:
+                    <input
+                      type='text'
+                      id='flag_url'
+                      className={!addTeam ? 'profileName' : 'profileNameActive'}
+                      disabled={!addTeam}
+                      value={flag_url}
+                      onChange={onChangeAdmin}
+                    />
+                  </label>
+                  <label>
+                    Group:
+                    <input
+                      type='text'
+                      id='group'
+                      className={!addTeam ? 'profileName' : 'profileNameActive'}
+                      disabled={!addTeam}
+                      value={group}
+                      onChange={onChangeAdmin}
+                    />
+                  </label>
+                </form>
+                {country && flag_url && group && (
+                  <button
+                    onClick={onSubmitAdmin}
+                    disabled={!addTeam}
+                    className={
+                      country && flag_url && group ? 'submit' : 'submitDisabled'
+                    }
+                  >
+                    Submit
+                  </button>
+                )}
+              </div>
+              <AddMatch />
             </>
           )}
         </main>

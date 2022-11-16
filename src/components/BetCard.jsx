@@ -50,10 +50,11 @@ export default function BetCard({ data, setLoading, id }) {
   }
   return (
     <>
-      <div className='modalContainer'>
-        <div className='scoreCardModal'>
-          <div className='scoreCardHeaderModal'>Update Bet</div>
-          <div className='scoreCardBodyModal'>
+      <div className='scoreGrid'>
+        {/* <div className='modalContainer'> */}
+        <div className='scoreCard'>
+          <div className='scoreCardHeader'>Update Bet</div>
+          <div className='scoreCardBody'>
             <div className='teamInfoModal'>
               <p className='teamNameModal'>{data.home_team}</p>
               <div className='flagScoreContainerModal'>
@@ -93,16 +94,29 @@ export default function BetCard({ data, setLoading, id }) {
               </div>
             </div>
           </div>
-          <button
-            type='button'
-            className='logOut'
-            onClick={() => {
-              changeScore && updateBet()
-              setChangeScore((prevState) => !prevState)
-            }}
-          >
-            {changeScore ? 'done' : 'Edit score '}
-          </button>
+          <div className='betCardButtonContainer'>
+            <button
+              type='button'
+              className='logOut'
+              onClick={() => {
+                changeScore && updateBet()
+                setChangeScore((prevState) => !prevState)
+              }}
+            >
+              {changeScore ? 'done' : 'Edit score '}
+            </button>
+            {changeScore && (
+              <button
+                onClick={() => {
+                  setChangeScore((prevState) => !prevState)
+                }}
+                type='button'
+                className='logOut buttonOutline'
+              >
+                Cancel
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </>

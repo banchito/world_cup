@@ -169,22 +169,35 @@ export default function CreateBetModal({
                 </div>
               </div>
             </div>
-            {existingBet.length > 0 ? (
-              <Link type='button' className='logOut' to='/profile'>
-                {'Go to Profile'}
-              </Link>
-            ) : (
-              <button
-                type='button'
-                className='logOut'
-                onClick={() => {
-                  changeScore && submitBet()
-                  setChangeScore((prevState) => !prevState)
-                }}
-              >
-                {changeScore ? 'done' : 'Edit score '}
-              </button>
-            )}
+            <div className='betCardButtonContainer'>
+              {existingBet.length > 0 ? (
+                <Link type='button' className='logOut' to='/profile'>
+                  {'Go to Profile'}
+                </Link>
+              ) : (
+                <button
+                  type='button'
+                  className='logOut'
+                  onClick={() => {
+                    changeScore && submitBet()
+                    setChangeScore((prevState) => !prevState)
+                  }}
+                >
+                  {changeScore ? 'done' : 'Edit score '}
+                </button>
+              )}
+              {changeScore && (
+                <button
+                  onClick={() => {
+                    setChangeScore((prevState) => !prevState)
+                  }}
+                  type='button'
+                  className='logOut buttonOutline'
+                >
+                  Cancel
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
