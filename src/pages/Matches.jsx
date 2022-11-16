@@ -28,7 +28,7 @@ export default function Matches() {
         const matchesRef = collection(db, 'matches')
 
         //create query
-        const q = query(matchesRef, orderBy('time'), limit(5))
+        const q = query(matchesRef, orderBy('time'), limit(2))
 
         //execute query
         const querySnap = await getDocs(q)
@@ -49,34 +49,34 @@ export default function Matches() {
     fetchMatches()
   }, [])
 
-  const onFetchMoreMatches = async () => {
-    try {
-      //Get reference to the collection
-      const matchesRef = collection(db, 'matches')
+  // const onFetchMoreMatches = async () => {
+  //   try {
+  //     //Get reference to the collection
+  //     const matchesRef = collection(db, 'matches')
 
-      //create query
-      const q = query(
-        matchesRef,
-        orderBy('time'),
-        startAfter(lastFetchedMatch),
-        limit(10)
-      )
+  //     //create query
+  //     const q = query(
+  //       matchesRef,
+  //       orderBy('time'),
+  //       startAfter(lastFetchedMatch),
+  //       limit(10)
+  //     )
 
-      //execute query
-      const querySnap = await getDocs(q)
-      const lastVisible = querySnap.docs[querySnap.docs.length - 1]
-      setLastFetchedMatch(lastVisible)
-      const matches = []
-      querySnap.forEach((doc) => {
-        return matches.push({ id: doc.id, data: doc.data() })
-      })
+  //     //execute query
+  //     const querySnap = await getDocs(q)
+  //     const lastVisible = querySnap.docs[querySnap.docs.length - 1]
+  //     setLastFetchedMatch(lastVisible)
+  //     const matches = []
+  //     querySnap.forEach((doc) => {
+  //       return matches.push({ id: doc.id, data: doc.data() })
+  //     })
 
-      setMatches((prevState) => [...prevState, ...matches])
-      setLoading(false)
-    } catch (error) {
-      toast.error('could not fetch matches')
-    }
-  }
+  //     setMatches((prevState) => [...prevState, ...matches])
+  //     setLoading(false)
+  //   } catch (error) {
+  //     toast.error('could not fetch matches')
+  //   }
+  // }
 
   return (
     <>
@@ -104,11 +104,11 @@ export default function Matches() {
                     />
                   ))}
                 </div>
-                {lastFetchedMatch && (
+                {/* {lastFetchedMatch && (
                   <p className='loadMore' onClick={onFetchMoreMatches}>
                     Load more
                   </p>
-                )}
+                )} */}
               </div>
             </>
           ) : (
