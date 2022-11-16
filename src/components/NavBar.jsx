@@ -25,7 +25,7 @@ function NavBar() {
             }
             onClick={() => navigate('/bet-stats')}
           >
-            <ExploreIcon size='1.5em' />
+            <ExploreIcon size='1em' />
             <p
               className={
                 pathMatchRoute('/bet-stats')
@@ -43,7 +43,7 @@ function NavBar() {
             }
             onClick={() => navigate('/')}
           >
-            <MatchesIcon size='1.5em' />
+            <MatchesIcon size='1em' />
             <p
               className={
                 pathMatchRoute('/')
@@ -63,7 +63,7 @@ function NavBar() {
             }
             onClick={() => navigate('/profile')}
           >
-            <ProfileIcon size='1.5em' />
+            <ProfileIcon size='1em' />
             <p
               className={
                 pathMatchRoute('/profile')
