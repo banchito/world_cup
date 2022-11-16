@@ -28,7 +28,7 @@ export default function Matches() {
         const matchesRef = collection(db, 'matches')
 
         //create query
-        const q = query(matchesRef, orderBy('time'), limit(2))
+        const q = query(matchesRef, orderBy('time'), limit(4))
 
         //execute query
         const querySnap = await getDocs(q)
