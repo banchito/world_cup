@@ -50,8 +50,8 @@ export default function BetCard({ data, setLoading, id }) {
   }
   return (
     <>
-      <div className='adminCard margin-bottom'>
-        <div className='profileCard'>
+      <div className='modalContainer'>
+        <div className='scoreCardModal'>
           <div className='scoreCardHeaderModal'>Update Bet</div>
           <div className='scoreCardBodyModal'>
             <div className='teamInfoModal'>
