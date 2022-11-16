@@ -1172,3 +1172,7 @@ input[type=number] {
   font-size: 0.8rem;
   opacity: 0.75;
 }
+
+.margin-bottom{
+  margin-bottom: 1rem;
+}
