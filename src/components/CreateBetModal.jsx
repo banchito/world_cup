@@ -27,6 +27,7 @@ export default function CreateBetModal({
     home_team_goals,
     home_team_sm_flag_url,
     userId,
+    time,
   },
 }) {
   const [loading, setLoading] = useState(false)
@@ -65,6 +66,7 @@ export default function CreateBetModal({
         home_team,
         matchId,
         userId,
+        matchTime: time,
         timestamp: serverTimestamp(),
       }
       await addDoc(collection(db, 'user_bet'), betInfo)
@@ -171,9 +173,20 @@ export default function CreateBetModal({
             </div>
             <div className='betCardButtonContainer'>
               {existingBet.length > 0 ? (
-                <Link type='button' className='logOut' to='/profile'>
-                  {'Go to Profile'}
-                </Link>
+                <>
+                  <Link type='button' className='logOut' to='/profile'>
+                    {'To Profile'}
+                  </Link>
+                  <button
+                    onClick={() => {
+                      onClose()
+                    }}
+                    type='button'
+                    className='logOut buttonOutline'
+                  >
+                    Cancel
+                  </button>
+                </>
               ) : (
                 <button
                   type='button'
@@ -183,7 +196,7 @@ export default function CreateBetModal({
                     setChangeScore((prevState) => !prevState)
                   }}
                 >
-                  {changeScore ? 'done' : 'Edit score '}
+                  {changeScore ? 'Submit' : 'Edit score '}
                 </button>
               )}
               {changeScore && (

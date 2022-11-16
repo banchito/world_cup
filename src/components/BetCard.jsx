@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { updateDoc, doc, serverTimestamp } from 'firebase/firestore'
 import { db } from '../firebase.config'
 import { toast } from 'react-toastify'
-import { matchResult } from '../helpers/helperFunctions'
+import { dateToString, matchResult } from '../helpers/helperFunctions'
 
 export default function BetCard({ data, setLoading, id }) {
   const [changeScore, setChangeScore] = useState(false)
@@ -11,10 +11,15 @@ export default function BetCard({ data, setLoading, id }) {
     away_score: data.away_team_goals,
   })
   const { home_score, away_score } = score
+  let matchDate = dateToString(data.matchTime)
 
-  const updateBet = async () => {
+  const updateBet = async (matchDate) => {
+    //call the matchtime directly from db
+    const today = new Date()
+    if (matchDate < today.getTime() / 1000) {
+      return toast.error('Bets are closed for this game')
+    }
     setLoading(true)
-
     const result = matchResult(
       home_score,
       away_score,
@@ -52,7 +57,9 @@ export default function BetCard({ data, setLoading, id }) {
     <>
       <div className='scoreGrid'>
         <div className='adminCard'>
-          <div className='scoreCardHeader'>Update Bet</div>
+          <div className='scoreCardHeader scoreCardHeaderUpdate '>
+            Update Bet Before: {matchDate}
+          </div>
           <div className='scoreCardBody'>
             <div className='teamInfoModal'>
               <p className='teamNameModal'>{data.home_team}</p>
@@ -98,11 +105,11 @@ export default function BetCard({ data, setLoading, id }) {
               type='button'
               className='logOut'
               onClick={() => {
-                changeScore && updateBet()
+                changeScore && updateBet(data.matchTime.seconds)
                 setChangeScore((prevState) => !prevState)
               }}
             >
-              {changeScore ? 'done' : 'Edit score '}
+              {changeScore ? 'Submit' : 'Edit score '}
             </button>
             {changeScore && (
               <button

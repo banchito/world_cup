@@ -454,7 +454,14 @@ button {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  
 }
+
+.scoreCardHeaderUpdate{
+justify-content: center;
+  flex-wrap: wrap;
+}
+
 @media (max-width: 280px) {
   .scoreCardHeader{
    align-items: center;
@@ -882,8 +889,9 @@ align-self: center;
 .profileContainer{
   display: flex;
   flex-direction: column;
-  margin-left: auto;
-  margin-right: auto;
+  /* margin-left: auto;
+  margin-right: auto; */
+  align-items: center;
 }
 
 .profile {
@@ -978,7 +986,7 @@ align-self: center;
   border-radius: 1rem;
   padding: 1rem;
   box-shadow: rgba(0, 0, 0, 0.2);
-  max-width: 300px;
+  width: 300px;
   font-weight: 600;
 }
 

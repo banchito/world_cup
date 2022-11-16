@@ -11,6 +11,24 @@ export const isNum = (number) => {
   return isnum
 }
 
+export const dateToString = (dateTime) => {
+  const options = {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  }
+
+  let dateString = dateTime
+    .toDate()
+    .toLocaleDateString(undefined, options)
+    .replace(',', '')
+    .replace(',', '')
+
+  return dateString
+}
+
 export const matchResult = (
   homeScore,
   awayScore,

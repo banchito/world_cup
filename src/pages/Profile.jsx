@@ -116,7 +116,7 @@ function Profile() {
           </button>
         </header>
 
-        <main className=''>
+        <main className='profileContainer'>
           <div className='profileDetailsHeader'>
             <p className='profileDetailsText'>Personal Details</p>
             <p

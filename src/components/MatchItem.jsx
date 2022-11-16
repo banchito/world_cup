@@ -5,6 +5,7 @@ import { useAuthStatus } from '../hooks/useAuthStatus'
 import Spinner from './Spinner.jsx'
 import CreateBetModal from './CreateBetModal.jsx'
 import { toast } from 'react-toastify'
+import { dateToString } from '../helpers/helperFunctions'
 
 function MatchItem({
   matchId,
@@ -27,23 +28,12 @@ function MatchItem({
 }) {
   const { loggedIn, checkingStatus } = useAuthStatus()
   const [showModal, setShowModal] = useState(null)
-  const options = {
-    weekday: 'short',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  }
-  let dateString = time
-    .toDate()
-    .toLocaleDateString(undefined, options)
-    .replace(',', '')
-    .replace(',', '')
+
+  let matchDate = dateToString(time)
 
   const showBetOnMatch = useCallback(() => {
     const today = new Date()
     if (time.seconds < today.getTime() / 1000) {
-      console.log(time.seconds < today.getTime() / 1000)
       return toast.error('Bets are closed for this game')
     }
     setShowModal({
@@ -52,6 +42,10 @@ function MatchItem({
       },
     })
   }, [setShowModal])
+
+  const updateScoreAdmin = async () => {
+    console.log('todo')
+  }
 
   if (checkingStatus) {
     return <Spinner />
@@ -72,6 +66,7 @@ function MatchItem({
             away_team_id,
             away_team_goals,
             userId,
+            time,
           }}
         />
       )}
@@ -82,7 +77,7 @@ function MatchItem({
             {isAdmin && (
               <li className='cardHeaderIcons'>
                 {' '}
-                <MdEdit size='2.5em' />
+                <MdEdit size='2.5em' onClick={updateScoreAdmin} />
               </li>
             )}
             {loggedIn ? (
@@ -120,7 +115,7 @@ function MatchItem({
               </div>
             </div>
             <div className='matchDateTime'>
-              <p>{dateString}</p>{' '}
+              <p>{matchDate}</p>{' '}
             </div>
           </div>
         </div>
