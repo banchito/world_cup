@@ -130,9 +130,9 @@ function AddMatch() {
           <Autocomplete
             id='away_team'
             options={teams ? teams : []}
-            sx={{ width: 300, margin: '1rem' }}
+            sx={{ width: 250 }}
             renderInput={(params) => (
-              <TextField {...params} label='Away Team' />
+              <TextField sx={{ width: 250 }} {...params} label='Away Team' />
             )}
             isOptionEqualToValue={(option, value) => option.id === value.id}
             onChange={(_, teamSelected) =>
@@ -149,7 +149,7 @@ function AddMatch() {
             }
           />
 
-          <DatePicker setFormData={setFormData} />
+          <DatePicker sx={{ width: 250 }} setFormData={setFormData} />
         </form>
         <button
           onClick={onSubmitAdmin}
