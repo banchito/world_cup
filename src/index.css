@@ -426,6 +426,7 @@ button {
   grid-auto-rows: auto;
   align-items: flex-start;
   margin-bottom: 1rem;
+  gap:1rem;
 }
 
 @media (max-width: 850px) {

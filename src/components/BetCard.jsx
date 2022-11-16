@@ -51,7 +51,6 @@ export default function BetCard({ data, setLoading, id }) {
   return (
     <>
       <div className='scoreGrid'>
-        {/* <div className='modalContainer'> */}
         <div className='scoreCard'>
           <div className='scoreCardHeader'>Update Bet</div>
           <div className='scoreCardBody'>
