@@ -4,6 +4,7 @@ import { MdOutlineCasino, MdEdit } from 'react-icons/md'
 import { useAuthStatus } from '../hooks/useAuthStatus'
 import Spinner from './Spinner.jsx'
 import CreateBetModal from './CreateBetModal.jsx'
+import { toast } from 'react-toastify'
 
 function MatchItem({
   matchId,
@@ -40,6 +41,11 @@ function MatchItem({
     .replace(',', '')
 
   const showBetOnMatch = useCallback(() => {
+    const today = new Date()
+    if (time.seconds < today.getTime() / 1000) {
+      console.log(time.seconds < today.getTime() / 1000)
+      return toast.error('Bets are closed for this game')
+    }
     setShowModal({
       onClose() {
         setShowModal(null)

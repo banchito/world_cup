@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import dayjs from 'dayjs'
 import TextField from '@mui/material/TextField'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
@@ -19,28 +18,15 @@ function DatePicker({ setFormData }) {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DateTimePicker
         renderInput={(props) => (
-          <TextField sx={{ width: 300, margin: '1rem' }} {...props} />
+          <TextField sx={{ width: 250, margin: '1rem' }} {...props} />
         )}
-        label='DateTimePicker'
+        label='Date & Time'
         value={value}
         onChange={(newValue) => {
           setValue(newValue)
         }}
       />
     </LocalizationProvider>
-    // <LocalizationProvider dateAdapter={AdapterDayjs}>
-    //   <TextField
-    //     id='datetime-local'
-    //     label='Next appointment'
-    //     type='datetime-local'
-    //     defaultValue='2017-05-24T10:30'
-    //     sx={{ width: 300, margin: '1rem' }}
-    //     InputLabelProps={{
-    //       shrink: true,
-    //     }}
-    //     onChange={setValue(newValue)}
-    //   />
-    // </LocalizationProvider>
   )
 }
 
