@@ -41,27 +41,21 @@ export const matchResult = (
 
   if (scoreA === scoreB)
     return {
-      isDraw: true,
+      is_draw: true,
       loser: '',
       winner: '',
-      // homeScore: scoreA,
-      // awayScore: scoreB,
     }
   if (scoreA > scoreB)
     return {
-      isDraw: false,
+      is_draw: false,
       loser: away_team_id,
       winner: home_team_id,
-      // homeScore: scoreA,
-      // awayScore: scoreB,
     }
   if (scoreA < scoreB)
     return {
-      isDraw: false,
+      is_draw: false,
       loser: home_team_id,
       winner: away_team_id,
-      // homeScore: scoreA,
-      // awayScore: scoreB,
     }
 }
 

@@ -62,13 +62,13 @@ export default function CreateBetModal({
         away_team_id,
         home_team_id,
         away_team_sm_flag_url,
-        away_team_goals: away_score,
+        away_team_goals: parseInt(away_score),
         away_team,
-        is_draw: result.isDraw,
+        is_draw: result.is_draw,
         winner: result.winner,
         loser: result.loser,
         home_team_sm_flag_url,
-        home_team_goals: home_score,
+        home_team_goals: parseInt(home_score),
         home_team,
         points_won: 0,
         matchId,
@@ -100,15 +100,16 @@ export default function CreateBetModal({
       away_team_id,
       home_team_id
     )
-    console.log(result)
+
     const matchResultInfo = {
-      away_team_goals: away_score,
-      home_team_goals: home_score,
-      is_draw: result.isDraw,
+      away_team_goals: parseInt(away_score),
+      home_team_goals: parseInt(home_score),
+      is_draw: result.is_draw,
       winner: result.winner,
       loser: result.loser,
       updateTimeStamp: serverTimestamp(),
     }
+
     try {
       //update match result
       //const matchRef = doc(db, 'matches', matchId)
@@ -119,26 +120,82 @@ export default function CreateBetModal({
       const q = query(betsRef, where('matchId', '==', matchId))
       const querySnap = await getDocs(q)
       const bets = []
-      //2 pointer array
-      //5 pointer array
+
       querySnap.forEach((doc) => {
         return bets.push({ id: doc.id, data: doc.data() })
       })
-      const batch = writeBatch(db)
-      querySnap.forEach(async (bet) => {
-        console.log(bet.id)
-        const docRef = doc(db, 'user_bet', bet.id)
-        if (
-          bet.data().away_team_goals === matchResultInfo.away_team_goals &&
-          bet.data().home_team_goals === matchResultInfo.home_team_goals
-        ) {
-          console.log(bet.id)
-          batch.update(docRef, {
-            points_won: 10,
-          })
-        }
+      //2 pointer array
+      let betsWithTwoPoints = []
+      //5 pointer array
+      let betsWithFivePoints = []
+
+      betsWithTwoPoints = await bets.filter((doc) => {
+        //console.log(doc.data.is_draw)
+        // console.log(doc.data.is_draw, matchResultInfo.is_draw)
+        // console.log(doc.data.winner === matchResultInfo.winner)
+        // console.log(doc.data.loser === matchResultInfo.loser)
+        return (
+          doc.data.is_draw === matchResultInfo.is_draw &&
+          doc.data.winner === matchResultInfo.winner &&
+          doc.data.loser === matchResultInfo.loser &&
+          (doc.data.away_team_goals !== matchResultInfo.away_team_goals ||
+            doc.data.home_team_goals !== matchResultInfo.home_team_goals)
+        )
       })
+
+      betsWithFivePoints = bets.filter((doc) => {
+        return (
+          doc.data.away_team_goals === matchResultInfo.away_team_goals &&
+          doc.data.home_team_goals === matchResultInfo.home_team_goals
+        )
+      })
+
+      console.log(betsWithTwoPoints, betsWithFivePoints)
+
+      const batch = writeBatch(db)
+
+      betsWithTwoPoints.forEach(async (bet) => {
+        const docRef = doc(db, 'user_bet', bet.id)
+        return batch.update(docRef, {
+          points_won: 2,
+        })
+      })
+
+      betsWithFivePoints.forEach(async (bet) => {
+        const docRef = doc(db, 'user_bet', bet.id)
+        return batch.update(docRef, {
+          points_won: 5,
+        })
+      })
+
       await batch.commit()
+
+      // querySnap.forEach((doc) => {
+      //   return bets.push({ id: doc.id, data: doc.data() })
+      // })
+      // const batch = writeBatch(db)
+      // querySnap.forEach(async (bet) => {
+      //   console.log(bet.id)
+      //   const docRef = doc(db, 'user_bet', bet.id)
+      //   console.log(bet.id)
+      //   return batch.update(docRef, {
+      //     points_won: 10,
+      //   })
+      // })
+
+      // for (let bet of bets) {
+      //   console.log(bet)
+      //   const docRef = doc(db, 'user_bet', bet.id)
+      //   if (
+      //     bet.data().away_team_goals === matchResultInfo.away_team_goals &&
+      //     bet.data().home_team_goals === matchResultInfo.home_team_goals
+      //   ) {
+      //     return batch.update(docRef, {
+      //       points_won: 10,
+      //     })
+      //   }
+      // }
+
       // let points = 0
       // querySnap.forEach(async (item) => {
       //   console.log(item.id)

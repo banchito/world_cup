@@ -27,9 +27,9 @@ export default function BetCard({ data, setLoading, id }) {
     )
 
     const updatedBetinfo = {
-      away_team_goals: away_score,
-      home_team_goals: home_score,
-      is_draw: result.isDraw,
+      away_team_goals: parseInt(away_score),
+      home_team_goals: parseInt(home_score),
+      is_draw: result.is_draw,
       winner: result.winner,
       loser: result.loser,
       updateTimeStamp: serverTimestamp(),
