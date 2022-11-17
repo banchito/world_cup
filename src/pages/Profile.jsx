@@ -13,12 +13,12 @@ import { toast } from 'react-toastify'
 import { useIsAdmin } from '../hooks/useIsAdmin'
 import Spinner from '../components/Spinner'
 import AddMatch from '../components/AddMatch'
-import UserContext from '../Context/UserContext'
+// import UserContext from '../Context/UserContext'
 import BetCard from '../components/BetCard'
 import { fetchUserBets } from '../Context/UserActions'
 
 function Profile() {
-  const { dispatch } = useContext(UserContext)
+  // const { dispatch } = useContext(UserContext)
   const auth = getAuth()
   const [loading, setLoading] = useState(false)
   const [changeDetails, setChangeDetails] = useState(false)
@@ -42,8 +42,8 @@ function Profile() {
 
   const onLogout = () => {
     auth.signOut()
-    dispatch({ type: 'GET_USER_ID', payload: '' })
-    dispatch({ type: 'GET_USER_BETS', payload: [] })
+    // dispatch({ type: 'GET_USER_ID', payload: '' })
+    // dispatch({ type: 'GET_USER_BETS', payload: [] })
     navigate('/')
   }
 

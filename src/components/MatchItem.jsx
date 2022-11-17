@@ -14,12 +14,10 @@ function MatchItem({
   match: {
     group,
     home_team,
-    home_team_flag_url,
     home_team_sm_flag_url,
     home_team_goals,
     home_team_id,
     away_team,
-    away_team_flag_url,
     away_team_sm_flag_url,
     away_team_goals,
     away_team_id,
@@ -31,7 +29,7 @@ function MatchItem({
 
   let matchDate = dateToString(time)
 
-  const showBetOnMatch = useCallback(() => {
+  const showMatchBet = useCallback(() => {
     const today = new Date()
     if (time.seconds < today.getTime() / 1000) {
       return toast.error('Bets are closed for this game')
@@ -40,12 +38,18 @@ function MatchItem({
       onClose() {
         setShowModal(null)
       },
+      updateScoreAdmin: false,
     })
   }, [setShowModal])
 
-  const updateScoreAdmin = async () => {
-    console.log('todo')
-  }
+  const updateScoreAdmin = useCallback(() => {
+    setShowModal({
+      onClose() {
+        setShowModal(null)
+      },
+      updateScoreAdmin: true,
+    })
+  }, [setShowModal])
 
   if (checkingStatus) {
     return <Spinner />
@@ -55,6 +59,8 @@ function MatchItem({
       {showModal && (
         <CreateBetModal
           onClose={showModal.onClose}
+          isAdmin={isAdmin}
+          updateScoreAdmin={showModal.updateScoreAdmin}
           matchId={matchId}
           info={{
             home_team_sm_flag_url,
@@ -81,7 +87,7 @@ function MatchItem({
               </li>
             )}
             {loggedIn ? (
-              <li onClick={showBetOnMatch} className='cardHeaderIcons'>
+              <li onClick={showMatchBet} className='cardHeaderIcons'>
                 <MdOutlineCasino size='2.5em' />
               </li>
             ) : (

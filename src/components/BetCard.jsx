@@ -14,7 +14,6 @@ export default function BetCard({ data, setLoading, id }) {
   let matchDate = dateToString(data.matchTime)
 
   const updateBet = async (matchDate) => {
-    //call the matchtime directly from db
     const today = new Date()
     if (matchDate < today.getTime() / 1000) {
       return toast.error('Bets are closed for this game')

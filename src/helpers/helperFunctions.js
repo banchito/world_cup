@@ -35,14 +35,34 @@ export const matchResult = (
   away_team_id,
   home_team_id
 ) => {
+
   const scoreA = parseInt(homeScore)
   const scoreB = parseInt(awayScore)
 
-  if (scoreA === scoreB) return { isDraw: true, loser: '', winner: '' }
+  if (scoreA === scoreB)
+    return {
+      isDraw: true,
+      loser: '',
+      winner: '',
+      // homeScore: scoreA,
+      // awayScore: scoreB,
+    }
   if (scoreA > scoreB)
-    return { isDraw: false, loser: away_team_id, winner: home_team_id }
+    return {
+      isDraw: false,
+      loser: away_team_id,
+      winner: home_team_id,
+      // homeScore: scoreA,
+      // awayScore: scoreB,
+    }
   if (scoreA < scoreB)
-    return { isDraw: false, loser: home_team_id, winner: away_team_id }
+    return {
+      isDraw: false,
+      loser: home_team_id,
+      winner: away_team_id,
+      // homeScore: scoreA,
+      // awayScore: scoreB,
+    }
 }
 
 

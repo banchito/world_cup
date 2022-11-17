@@ -1,21 +1,21 @@
-import { createContext, useReducer } from 'react'
-import userReducer from './UserReducer'
+// import { createContext, useReducer } from 'react'
+// import userReducer from './UserReducer'
 
-const UserContext = createContext()
+// const UserContext = createContext()
 
-export const UserProvider = ({ children }) => {
-  const initialState = {
-    userBets: [],
-    userId: '',
-  }
+// export const UserProvider = ({ children }) => {
+//   const initialState = {
+//     userBets: [],
+//     userId: '',
+//   }
 
-  const [state, dispatch] = useReducer(userReducer, initialState)
+//   const [state, dispatch] = useReducer(userReducer, initialState)
 
-  return (
-    <UserContext.Provider value={{ ...state, dispatch }}>
-      {children}
-    </UserContext.Provider>
-  )
-}
+//   return (
+//     <UserContext.Provider value={{ ...state, dispatch }}>
+//       {children}
+//     </UserContext.Provider>
+//   )
+// }
 
-export default UserContext
+// export default UserContext

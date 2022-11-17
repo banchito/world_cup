@@ -9,11 +9,12 @@ import Profile from './pages/Profile'
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
 import ForgotPassword from './pages/ForgotPassword'
-import { UserProvider } from './Context/UserContext'
+// import { UserProvider } from './Context/UserContext'
 
 function App() {
   return (
-    <UserProvider>
+    // <UserProvider>
+    <>
       <Router>
         <Routes>
           <Route path='/' element={<Matches />} />
@@ -33,7 +34,8 @@ function App() {
         autoClose={3000}
         pauseOnFocusLoss
       />
-    </UserProvider>
+    </>
+    // </UserProvider>
   )
 }
 

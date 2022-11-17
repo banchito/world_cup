@@ -1,15 +1,15 @@
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { Link, useNavigate } from 'react-router-dom'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { ReactComponent as ArrowRightIcon } from '../assets/svg/keyboardArrowRightIcon.svg'
 import visibilityIcon from '../assets/svg/visibilityIcon.svg'
 import OAuth from '../components/OAuth'
-import UserContext from '../Context/UserContext'
+// import UserContext from '../Context/UserContext'
 import { fetchUserBets } from '../Context/UserActions'
 
 function SignIn() {
-  const { dispatch } = useContext(UserContext)
+  // const { dispatch } = useContext(UserContext)
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
     email: '',
@@ -36,12 +36,12 @@ function SignIn() {
       )
 
       if (userCredentail.user) {
-        dispatch({ type: 'GET_USER_ID', payload: userCredentail.user.uid })
+        // dispatch({ type: 'GET_USER_ID', payload: userCredentail.user.uid })
 
-        dispatch({
-          type: 'GET_USER_BETS',
-          payload: await fetchUserBets(userCredentail.user.uid),
-        })
+        // dispatch({
+        //   type: 'GET_USER_BETS',
+        //   payload: await fetchUserBets(userCredentail.user.uid),
+        // })
         navigate('/')
       }
     } catch (error) {
