@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { getAuth, updateProfile } from 'firebase/auth'
 import {
   updateDoc,
@@ -13,18 +13,17 @@ import { toast } from 'react-toastify'
 import { useIsAdmin } from '../hooks/useIsAdmin'
 import Spinner from '../components/Spinner'
 import AddMatch from '../components/AddMatch'
-// import UserContext from '../Context/UserContext'
 import BetCard from '../components/BetCard'
-import { fetchUserBets } from '../Context/UserActions'
+import { fetchUserBets, fetchUserPoints } from '../Context/UserActions'
 
 function Profile() {
-  // const { dispatch } = useContext(UserContext)
   const auth = getAuth()
   const [loading, setLoading] = useState(false)
   const [changeDetails, setChangeDetails] = useState(false)
   const [addTeam, setAddTeam] = useState(false)
   const [showMyBets, setShowMyBets] = useState(false)
   const [userBets, setuserBets] = useState([])
+  const [userPoints, setuserPoints] = useState([])
   const [adminFormData, setAdminFormData] = useState({
     country: '',
     flag_url: '',
@@ -42,8 +41,6 @@ function Profile() {
 
   const onLogout = () => {
     auth.signOut()
-    // dispatch({ type: 'GET_USER_ID', payload: '' })
-    // dispatch({ type: 'GET_USER_BETS', payload: [] })
     navigate('/')
   }
 
@@ -99,12 +96,29 @@ function Profile() {
 
   useEffect(() => {
     const getUserBets = async () => {
-      const { bets } = await fetchUserBets(auth.currentUser.uid)
-      setuserBets(bets)
+      try {
+        const { bets } = await fetchUserBets(auth.currentUser.uid)
+        setuserBets(bets)
+      } catch (error) {
+        toast.error('Could Not Get Uset Bets')
+      }
     }
     getUserBets()
   }, [auth.currentUser.uid])
 
+  useEffect(() => {
+    const getUserPoints = async () => {
+      try {
+        const { points } = await fetchUserPoints(email)
+        setuserPoints(points[0])
+      } catch (error) {
+        toast.error('Could Not Get Uset Bets')
+      }
+    }
+    getUserPoints()
+  }, [email])
+
+  console.log(userPoints)
   return (
     <>
       <div className='profile'>
@@ -165,6 +179,8 @@ function Profile() {
 
           <div className='editBetSection'>
             <p className='personalDetailsText'>My Bets</p>
+            <span className='personalDetailsText'>{`Current Total Points: ${userPoints.points}`}</span>
+
             {userBets.length > 0 &&
               userBets.map((userbet) => (
                 <BetCard

@@ -4,6 +4,7 @@ import { db } from '../firebase.config'
 
 export const useIsAdmin = (uid) => {
   const [isAdmin, setIsAdmin] = useState(false)
+  const [email, setEmail] = useState('')
   const isMounted = useRef(true)
 
   useEffect(() => {
@@ -16,9 +17,9 @@ export const useIsAdmin = (uid) => {
         const docSnap = await getDoc(docRef)
         if (docSnap.exists()) {
           setIsAdmin(docSnap.data().isAdmin)
+          setEmail(docSnap.data().email)
         }
       }
-
       getIsAdmin()
     }
     return () => {
@@ -26,5 +27,5 @@ export const useIsAdmin = (uid) => {
     }
   }, [isMounted, uid])
 
-  return { isAdmin, uid }
+  return { isAdmin, uid, email }
 }

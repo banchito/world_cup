@@ -9,17 +9,14 @@ import Profile from './pages/Profile'
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
 import ForgotPassword from './pages/ForgotPassword'
-// import { UserProvider } from './Context/UserContext'
 
 function App() {
   return (
-    // <UserProvider>
     <>
       <Router>
         <Routes>
           <Route path='/' element={<Matches />} />
           <Route path='/bet-stats' element={<BetStats />} />
-          {/* <Route path='/matches' element={<Matches />} /> */}
           <Route path='/profile' element={<PrivateRoute />}>
             <Route path='/profile' element={<Profile />} />
           </Route>
@@ -35,7 +32,6 @@ function App() {
         pauseOnFocusLoss
       />
     </>
-    // </UserProvider>
   )
 }
 

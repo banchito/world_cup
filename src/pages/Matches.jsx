@@ -19,7 +19,7 @@ export default function Matches() {
   const [loading, setLoading] = useState(true)
   const [lastFetchedMatch, setLastFetchedMatch] = useState(null)
   const userId = getAuth().currentUser?.uid
-  const { isAdmin } = useIsAdmin(userId)
+  const { isAdmin, email } = useIsAdmin(userId)
 
   useEffect(() => {
     const fetchMatches = async () => {
@@ -28,7 +28,7 @@ export default function Matches() {
         const matchesRef = collection(db, 'matches')
 
         //create query
-        const q = query(matchesRef, orderBy('time'), limit(4))
+        const q = query(matchesRef, orderBy('time'), limit(10))
 
         //execute query
         const querySnap = await getDocs(q)
@@ -100,6 +100,7 @@ export default function Matches() {
                       matchId={match.id}
                       match={match.data}
                       isAdmin={isAdmin}
+                      email={email}
                       userId={userId}
                     />
                   ))}

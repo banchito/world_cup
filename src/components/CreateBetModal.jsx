@@ -6,10 +6,10 @@ import {
   serverTimestamp,
   collection,
   where,
+  increment,
   doc,
   writeBatch,
   updateDoc,
-  onSnapshotsInSync,
 } from 'firebase/firestore'
 import { db } from '../firebase.config'
 import { Link } from 'react-router-dom'
@@ -34,6 +34,7 @@ export default function CreateBetModal({
     home_team_sm_flag_url,
     userId,
     time,
+    email,
   },
 }) {
   const [loading, setLoading] = useState(false)
@@ -44,6 +45,7 @@ export default function CreateBetModal({
     away_score: away_team_goals ? away_team_goals : 0,
   })
   const { home_score, away_score } = score
+
   const submitBet = async () => {
     if (!isNum(score.home_score) || !isNum(score.away_score)) {
       setChangeScore((prevState) => !prevState)
@@ -73,6 +75,8 @@ export default function CreateBetModal({
         points_won: 0,
         matchId,
         userId,
+        email,
+        isMatchResultUpdated: false,
         matchTime: time,
         timestamp: serverTimestamp(),
       }
@@ -112,28 +116,28 @@ export default function CreateBetModal({
 
     try {
       //update match result
-      //const matchRef = doc(db, 'matches', matchId)
-      // await updateDoc(matchRef, matchResultInfo)
+      const matchRef = doc(db, 'matches', matchId)
+      await updateDoc(matchRef, matchResultInfo)
 
-      //update all bets for this match
+      //update all bets for this match and user points
       const betsRef = collection(db, 'user_bet')
       const q = query(betsRef, where('matchId', '==', matchId))
       const querySnap = await getDocs(q)
       const bets = []
 
       querySnap.forEach((doc) => {
-        return bets.push({ id: doc.id, data: doc.data() })
+        return bets.push({
+          id: doc.id,
+          data: doc.data(),
+        })
       })
+
       //2 pointer array
       let betsWithTwoPoints = []
       //5 pointer array
       let betsWithFivePoints = []
 
       betsWithTwoPoints = await bets.filter((doc) => {
-        //console.log(doc.data.is_draw)
-        // console.log(doc.data.is_draw, matchResultInfo.is_draw)
-        // console.log(doc.data.winner === matchResultInfo.winner)
-        // console.log(doc.data.loser === matchResultInfo.loser)
         return (
           doc.data.is_draw === matchResultInfo.is_draw &&
           doc.data.winner === matchResultInfo.winner &&
@@ -150,95 +154,44 @@ export default function CreateBetModal({
         )
       })
 
-      console.log(betsWithTwoPoints, betsWithFivePoints)
-
       const batch = writeBatch(db)
 
-      betsWithTwoPoints.forEach(async (bet) => {
-        const docRef = doc(db, 'user_bet', bet.id)
-        return batch.update(docRef, {
-          points_won: 2,
-        })
-      })
-
-      betsWithFivePoints.forEach(async (bet) => {
-        const docRef = doc(db, 'user_bet', bet.id)
-        return batch.update(docRef, {
-          points_won: 5,
-        })
-      })
+      Promise.all([
+        betsWithTwoPoints.map(async (bet) => {
+          const docRef = doc(db, 'user_bet', bet.id)
+          return await batch.update(docRef, {
+            points_won: 2,
+            isMatchResultUpdated: true,
+          })
+        }),
+        betsWithTwoPoints.map(async (bet) => {
+          const docRef = doc(db, 'users', bet.data.userId)
+          return await batch.update(docRef, {
+            points: increment(2),
+          })
+        }),
+        betsWithFivePoints.map(async (bet) => {
+          const docRef = doc(db, 'user_bet', bet.id)
+          return batch.update(docRef, {
+            points_won: 5,
+            isMatchResultUpdated: true,
+          })
+        }),
+        betsWithFivePoints.map(async (bet) => {
+          const docRef = doc(db, 'users', bet.data.userId)
+          return await batch.update(docRef, {
+            points: increment(5),
+          })
+        }),
+        bets.map(async (bet) => {
+          const docRef = doc(db, 'user_bet', bet.id)
+          return batch.update(docRef, {
+            isMatchResultUpdated: true,
+          })
+        }),
+      ])
 
       await batch.commit()
-
-      // querySnap.forEach((doc) => {
-      //   return bets.push({ id: doc.id, data: doc.data() })
-      // })
-      // const batch = writeBatch(db)
-      // querySnap.forEach(async (bet) => {
-      //   console.log(bet.id)
-      //   const docRef = doc(db, 'user_bet', bet.id)
-      //   console.log(bet.id)
-      //   return batch.update(docRef, {
-      //     points_won: 10,
-      //   })
-      // })
-
-      // for (let bet of bets) {
-      //   console.log(bet)
-      //   const docRef = doc(db, 'user_bet', bet.id)
-      //   if (
-      //     bet.data().away_team_goals === matchResultInfo.away_team_goals &&
-      //     bet.data().home_team_goals === matchResultInfo.home_team_goals
-      //   ) {
-      //     return batch.update(docRef, {
-      //       points_won: 10,
-      //     })
-      //   }
-      // }
-
-      // let points = 0
-      // querySnap.forEach(async (item) => {
-      //   console.log(item.id)
-      //   if (
-      //     item.data().away_team_goals === matchResultInfo.away_team_goals &&
-      //     item.data().home_team_goals === matchResultInfo.home_team_goals
-      //   ) {
-      //     await updateDoc(doc(db, 'user_bet', item.id), { points_won: 1 })
-      //   }
-      // if (
-      //   doc.data().isDraw === matchResultInfo.isDraw ||
-      //   doc.data().winner === matchResultInfo.winner ||
-      //   doc.data().matchResultInfo.loser === matchResultInfo.loser
-      // ) {
-      //   points = points + 2
-      // }
-      // doc.update({ points_won: points })
-      //})
-
-      // db.collection('user_bet')
-      //   .where('matchId', '==', matchId)
-      //   .get()
-      //   .then(async (snaps) => {
-      //     const updates = []
-      //     snaps.forEach((doc) => {
-      //       let points = 0
-      //       if (
-      //         doc.data().away_team_goals === matchResultInfo.away_team_goals &&
-      //         doc.data().home_team_goals === matchResultInfo.home_team_goals
-      //       ) {
-      //         points = 3
-      //         updates.push(doc.ref.update({ points_won: 3 }))
-      //       }
-      //       if (
-      //         doc.data().isDraw === matchResultInfo.isDraw ||
-      //         doc.data().winner === matchResultInfo.winner ||
-      //         doc.data().matchResultInfo.loser === matchResultInfo.loser
-      //       ) {
-      //         updates.push(doc.ref.update({ points_won: points + 2 }))
-      //       }
-      //     })
-      //     await Promise.all(updates)
-      //   })
 
       setLoading(false)
       toast.success('Match Result Updated')

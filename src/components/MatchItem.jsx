@@ -11,6 +11,7 @@ function MatchItem({
   matchId,
   userId,
   isAdmin,
+  email,
   match: {
     group,
     home_team,
@@ -72,6 +73,7 @@ function MatchItem({
             away_team_id,
             away_team_goals,
             userId,
+            email,
             time,
           }}
         />

@@ -12,6 +12,48 @@ export const fetchUserBets = async (uid) => {
     })
     return { bets }
   } catch (error) {
-    return 'error'
+    console.log(error)
+    return error
+  }
+}
+
+export const fetchMatchResults = async (info) => {
+  try {
+    const matchRef = collection(db, 'matches')
+    const q = query(
+      matchRef,
+      where('away_team', '==', info.away_team),
+      where('home_team', '==', info.home_team),
+      where('time', '==', info.matchTime)
+    )
+    const querySnap = await getDocs(q)
+    const matches = []
+    querySnap.forEach((doc) => {
+      return matches.push({ id: doc.id, data: doc.data() })
+    })
+    return { matches }
+  } catch (error) {
+    console.log(error)
+    return error
+  }
+}
+
+export const fetchUserPoints = async (email) => {
+  try {
+    const usersRef = collection(db, 'users')
+
+    const q = query(usersRef, where('email', '==', email))
+
+    const querySnap = await getDocs(q)
+
+    const points = []
+    querySnap.forEach((doc) => {
+      return points.push({ points: doc.data().points })
+    })
+    console.log(points)
+    return { points }
+  } catch (error) {
+    console.log(error)
+    return error
   }
 }

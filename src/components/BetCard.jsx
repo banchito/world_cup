@@ -1,11 +1,20 @@
-import { useState } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { updateDoc, doc, serverTimestamp } from 'firebase/firestore'
 import { db } from '../firebase.config'
 import { toast } from 'react-toastify'
 import { dateToString, matchResult } from '../helpers/helperFunctions'
+import MatchResultModal from './MatchResultModal'
+import { fetchMatchResults } from '../Context/UserActions'
 
-export default function BetCard({ data, setLoading, id }) {
+export default function BetCard({
+  data,
+  setLoading,
+  id,
+  isMatchResultUpdated,
+}) {
   const [changeScore, setChangeScore] = useState(false)
+  const [showModal, setShowModal] = useState(null)
+  const [realMatchResult, setRealMatchResult] = useState([])
   const [score, setScore] = useState({
     home_score: data.home_team_goals,
     away_score: data.away_team_goals,
@@ -46,18 +55,48 @@ export default function BetCard({ data, setLoading, id }) {
     }
   }
 
+  const getRealMatchResults = async (info) => {
+    try {
+      const {
+        matches: [matches],
+      } = await fetchMatchResults(info)
+      setRealMatchResult(matches)
+      showMatchBet()
+    } catch (error) {
+      toast.error('Could Not Get Match')
+    }
+  }
+
+  const showMatchBet = useCallback(() => {
+    setShowModal({
+      onClose() {
+        setShowModal(null)
+      },
+    })
+  }, [setShowModal])
+
   const onChange = (e) => {
     setScore((prevState) => ({
       ...prevState,
       [e.target.id]: e.target.value,
     }))
   }
+
   return (
     <>
+      {showModal && (
+        <MatchResultModal
+          onClose={showModal.onClose}
+          realMatchResult={realMatchResult}
+          setLoading={setLoading}
+        />
+      )}
       <div className='scoreGrid'>
         <div className='adminCard'>
           <div className='scoreCardHeader scoreCardHeaderUpdate '>
-            Update Bet Before: {matchDate}
+            {data.isMatchResultUpdated
+              ? `Points Won: ${data.points_won}`
+              : ` Update Bet Before: ${matchDate}`}
           </div>
           <div className='scoreCardBody'>
             <div className='teamInfoModal'>
@@ -100,16 +139,32 @@ export default function BetCard({ data, setLoading, id }) {
             </div>
           </div>
           <div className='betCardButtonContainer'>
-            <button
-              type='button'
-              className='logOut'
-              onClick={() => {
-                changeScore && updateBet(data.matchTime.seconds)
-                setChangeScore((prevState) => !prevState)
-              }}
-            >
-              {changeScore ? 'Submit' : 'Edit score '}
-            </button>
+            {data.isMatchResultUpdated ? (
+              <button
+                type='button'
+                className='logOut'
+                onClick={() => {
+                  getRealMatchResults({
+                    away_team: data.away_team,
+                    home_team: data.home_team,
+                    matchTime: data.matchTime,
+                  })
+                }}
+              >
+                See Match Result
+              </button>
+            ) : (
+              <button
+                type='button'
+                className='logOut'
+                onClick={() => {
+                  changeScore && updateBet(data.matchTime.seconds)
+                  setChangeScore((prevState) => !prevState)
+                }}
+              >
+                {changeScore ? 'Submit' : 'Edit score '}
+              </button>
+            )}
             {changeScore && (
               <button
                 onClick={() => {
