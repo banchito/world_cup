@@ -10,7 +10,7 @@ import {
   capitalizeFirstLetter,
   dateIsValid,
 } from '../helpers/helperFunctions.js'
-
+//Todo implement groups
 function AddMatch() {
   const [loading, setLoading] = useState(false)
   const [teams, setTeams] = useState(null)

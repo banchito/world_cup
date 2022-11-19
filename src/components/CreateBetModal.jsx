@@ -47,6 +47,11 @@ export default function CreateBetModal({
   const { home_score, away_score } = score
 
   const submitBet = async () => {
+    const today = new Date()
+    if (time.seconds < today.getTime() / 1000) {
+      return toast.error('Bets are closed for this game')
+    }
+
     if (!isNum(score.home_score) || !isNum(score.away_score)) {
       setChangeScore((prevState) => !prevState)
       return toast.error(`provide a valid score`)
@@ -89,7 +94,7 @@ export default function CreateBetModal({
       toast.error(`could not save bet`)
     }
   }
-
+  //Update mtch result
   const submitMatchResult = async () => {
     if (!isAdmin) return toast.error(`No credentials for this task`)
     if (!isNum(score.home_score) || !isNum(score.away_score)) {
@@ -134,8 +139,8 @@ export default function CreateBetModal({
 
       //2 pointer array
       let betsWithTwoPoints = []
-      //5 pointer array
-      let betsWithFivePoints = []
+      //3 pointer array
+      let betsWithtThreePoints = []
 
       betsWithTwoPoints = await bets.filter((doc) => {
         return (
@@ -147,7 +152,7 @@ export default function CreateBetModal({
         )
       })
 
-      betsWithFivePoints = bets.filter((doc) => {
+      betsWithtThreePoints = bets.filter((doc) => {
         return (
           doc.data.away_team_goals === matchResultInfo.away_team_goals &&
           doc.data.home_team_goals === matchResultInfo.home_team_goals
@@ -170,17 +175,17 @@ export default function CreateBetModal({
             points: increment(2),
           })
         }),
-        betsWithFivePoints.map(async (bet) => {
+        betsWithtThreePoints.map(async (bet) => {
           const docRef = doc(db, 'user_bet', bet.id)
           return batch.update(docRef, {
-            points_won: 5,
+            points_won: 3,
             isMatchResultUpdated: true,
           })
         }),
-        betsWithFivePoints.map(async (bet) => {
+        betsWithtThreePoints.map(async (bet) => {
           const docRef = doc(db, 'users', bet.data.userId)
           return await batch.update(docRef, {
-            points: increment(5),
+            points: increment(3),
           })
         }),
         bets.map(async (bet) => {

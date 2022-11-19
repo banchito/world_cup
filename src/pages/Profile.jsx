@@ -109,16 +109,15 @@ function Profile() {
   useEffect(() => {
     const getUserPoints = async () => {
       try {
-        const { points } = await fetchUserPoints(email)
-        setuserPoints(points[0])
+        const points = await fetchUserPoints(auth.currentUser.uid)
+        setuserPoints(points)
       } catch (error) {
-        toast.error('Could Not Get Uset Bets')
+        toast.error('Could Not Get Uset Points')
       }
     }
     getUserPoints()
-  }, [email])
+  }, [auth.currentUser.uid])
 
-  console.log(userPoints)
   return (
     <>
       <div className='profile'>
@@ -179,7 +178,11 @@ function Profile() {
 
           <div className='editBetSection'>
             <p className='personalDetailsText'>My Bets</p>
-            <span className='personalDetailsText'>{`Current Total Points: ${userPoints.points}`}</span>
+            <span className='personalDetailsText'>
+              {userPoints.points
+                ? `Current Total Points: ${userPoints.points}`
+                : 'No Points Found'}
+            </span>
 
             {userBets.length > 0 &&
               userBets.map((userbet) => (

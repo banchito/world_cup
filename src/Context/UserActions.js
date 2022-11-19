@@ -1,5 +1,13 @@
 import { db } from '../firebase.config'
-import { collection, getDocs, query, where, orderBy } from 'firebase/firestore'
+import {
+  collection,
+  getDoc,
+  getDocs,
+  query,
+  where,
+  orderBy,
+  doc,
+} from 'firebase/firestore'
 
 export const fetchUserBets = async (uid) => {
   try {
@@ -17,41 +25,26 @@ export const fetchUserBets = async (uid) => {
   }
 }
 
-export const fetchMatchResults = async (info) => {
+export const fetchMatchResults = async ({ matchId }) => {
   try {
-    const matchRef = collection(db, 'matches')
-    const q = query(
-      matchRef,
-      where('away_team', '==', info.away_team),
-      where('home_team', '==', info.home_team),
-      where('time', '==', info.matchTime)
-    )
-    const querySnap = await getDocs(q)
-    const matches = []
-    querySnap.forEach((doc) => {
-      return matches.push({ id: doc.id, data: doc.data() })
-    })
-    return { matches }
+    const matchRef = doc(db, 'matches', matchId)
+    const docSnap = await getDoc(matchRef)
+    let matchResults = docSnap.data()
+
+    return matchResults
   } catch (error) {
     console.log(error)
     return error
   }
 }
 
-export const fetchUserPoints = async (email) => {
+export const fetchUserPoints = async (userId) => {
   try {
-    const usersRef = collection(db, 'users')
+    const usersRef = doc(db, 'users', userId)
+    const docSnap = await getDoc(usersRef)
+    let points = docSnap.data()
 
-    const q = query(usersRef, where('email', '==', email))
-
-    const querySnap = await getDocs(q)
-
-    const points = []
-    querySnap.forEach((doc) => {
-      return points.push({ points: doc.data().points })
-    })
-    console.log(points)
-    return { points }
+    return points
   } catch (error) {
     console.log(error)
     return error

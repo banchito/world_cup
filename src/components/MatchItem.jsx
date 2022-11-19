@@ -41,7 +41,7 @@ function MatchItem({
       },
       updateScoreAdmin: false,
     })
-  }, [setShowModal])
+  }, [setShowModal, time.seconds])
 
   const updateScoreAdmin = useCallback(() => {
     setShowModal({
@@ -123,7 +123,7 @@ function MatchItem({
               </div>
             </div>
             <div className='matchDateTime'>
-              <p>{matchDate}</p>{' '}
+              <p>{matchDate}</p>
             </div>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback } from 'react'
 import { updateDoc, doc, serverTimestamp } from 'firebase/firestore'
 import { db } from '../firebase.config'
 import { toast } from 'react-toastify'
@@ -6,15 +6,10 @@ import { dateToString, matchResult } from '../helpers/helperFunctions'
 import MatchResultModal from './MatchResultModal'
 import { fetchMatchResults } from '../Context/UserActions'
 
-export default function BetCard({
-  data,
-  setLoading,
-  id,
-  isMatchResultUpdated,
-}) {
+export default function BetCard({ data, setLoading, id }) {
   const [changeScore, setChangeScore] = useState(false)
   const [showModal, setShowModal] = useState(null)
-  const [realMatchResult, setRealMatchResult] = useState([])
+  const [realMatchResult, setRealMatchResult] = useState(null)
   const [score, setScore] = useState({
     home_score: data.home_team_goals,
     away_score: data.away_team_goals,
@@ -57,10 +52,9 @@ export default function BetCard({
 
   const getRealMatchResults = async (info) => {
     try {
-      const {
-        matches: [matches],
-      } = await fetchMatchResults(info)
-      setRealMatchResult(matches)
+      const matchResult = await fetchMatchResults(info)
+
+      setRealMatchResult(matchResult)
       showMatchBet()
     } catch (error) {
       toast.error('Could Not Get Match')
@@ -84,7 +78,7 @@ export default function BetCard({
 
   return (
     <>
-      {showModal && (
+      {realMatchResult && showModal && (
         <MatchResultModal
           onClose={showModal.onClose}
           realMatchResult={realMatchResult}
@@ -95,7 +89,7 @@ export default function BetCard({
         <div className='adminCard'>
           <div className='scoreCardHeader scoreCardHeaderUpdate '>
             {data.isMatchResultUpdated
-              ? `Points Won: ${data.points_won}`
+              ? `Points From This Bet: ${data.points_won}`
               : ` Update Bet Before: ${matchDate}`}
           </div>
           <div className='scoreCardBody'>
@@ -145,9 +139,7 @@ export default function BetCard({
                 className='logOut'
                 onClick={() => {
                   getRealMatchResults({
-                    away_team: data.away_team,
-                    home_team: data.home_team,
-                    matchTime: data.matchTime,
+                    matchId: data.matchId,
                   })
                 }}
               >
