@@ -45,9 +45,9 @@ function Profile() {
   }
 
   const onSubmit = async () => {
-    setLoading(true)
     try {
       if (auth.currentUser.displayName !== name) {
+        setLoading(true)
         //update display name in fb
         await updateProfile(auth.currentUser, { displayName: name })
         //update in firestore
