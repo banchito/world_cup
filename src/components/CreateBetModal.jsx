@@ -292,19 +292,17 @@ export default function CreateBetModal({
             )}
             {(existingBet.length < 1 || updateScoreAdmin) && (
               <>
-                <Box sx={{ width: 120 }}>
+                <Box sx={{ width: 200 }}>
                   <Slider
                     style={{ color: '#00cc66' }}
                     aria-label='Score'
                     defaultValue={0}
-                    // value={score}
                     name={'home_score'}
-                    // getAriaValueText={valuetext}
                     valueLabelDisplay='auto'
                     step={1}
                     marks
                     min={0}
-                    max={12}
+                    max={10}
                     onChange={onChange}
                   />
 
@@ -317,7 +315,7 @@ export default function CreateBetModal({
                     step={1}
                     marks
                     min={0}
-                    max={12}
+                    max={10}
                     onChange={onChange}
                   />
                 </Box>

@@ -643,16 +643,8 @@ text-align: end;
   align-items: center;
 }
 
-.scoreCardBodyModal{
-  display: flex;
-  flex-direction: row;
-  font-size: 0.8rem;
-  padding: 0 var(--padding);
-  align-items: center;
-}
-
 .scoreCardModal{
-   --padding: 1rem;
+   --padding: 3rem;
   margin: 1rem;
   background-color: white;
   border-radius: 0.25rem;
@@ -663,6 +655,15 @@ text-align: end;
   align-items: center;
   justify-content: center;
   gap:1rem;
+}
+
+
+.scoreCardBodyModal{
+  display: flex;
+  flex-direction: row;
+  font-size: 0.8rem;
+  padding: 0 var(--padding);
+  align-items: center;
 }
 
 .teamNameModal{

@@ -118,30 +118,31 @@ export default function BetCard({ data, setLoading, id }) {
             </div>
           </div>
           <div className='betCardSlider'>
-            <Box sx={{ width: 120 }}>
+            <Box sx={{ width: 200 }}>
               <Slider
                 style={{ color: '#00cc66' }}
                 aria-label='Score'
-                defaultValue={0}
+                defaultValue={data.home_team_goals ? data.home_team_goals : 0}
                 name={'home_score'}
+                size={'medium'}
                 valueLabelDisplay='auto'
                 step={1}
                 marks
                 min={0}
-                max={12}
+                max={10}
                 onChange={onChange}
               />
 
               <Slider
                 style={{ color: '#00cc66' }}
                 aria-label='Score'
-                defaultValue={0}
+                defaultValue={data.away_team_goals ? data.away_team_goals : 0}
                 name={'away_score'}
                 valueLabelDisplay='auto'
                 step={1}
                 marks
                 min={0}
-                max={12}
+                max={10}
                 onChange={onChange}
               />
             </Box>
@@ -162,7 +163,12 @@ export default function BetCard({ data, setLoading, id }) {
             ) : (
               <button
                 type='button'
-                className={'logOut'}
+                className={
+                  score.home_score === data.home_team_goals &&
+                  score.away_score === data.away_team_goals
+                    ? 'logOut submitDisabled'
+                    : 'logOut'
+                }
                 onClick={() => updateBet(data.matchTime.seconds)}
               >
                 Submit
@@ -170,7 +176,12 @@ export default function BetCard({ data, setLoading, id }) {
             )}
 
             <button
-              onClick={() => {}}
+              onClick={() => {
+                setScore({
+                  home_score: data.home_team_goals,
+                  away_score: data.away_team_goals,
+                })
+              }}
               type='button'
               className='logOut buttonOutline'
             >
