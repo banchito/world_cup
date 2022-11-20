@@ -5,9 +5,11 @@ import { toast } from 'react-toastify'
 import { dateToString, matchResult } from '../helpers/helperFunctions'
 import MatchResultModal from './MatchResultModal'
 import { fetchMatchResults } from '../Context/UserActions'
+import Box from '@mui/material/Box'
+import Slider from '@mui/material/Slider'
+import Avatar from '@mui/material/Avatar'
 
 export default function BetCard({ data, setLoading, id }) {
-  const [changeScore, setChangeScore] = useState(false)
   const [showModal, setShowModal] = useState(null)
   const [realMatchResult, setRealMatchResult] = useState(null)
   const [score, setScore] = useState({
@@ -69,13 +71,12 @@ export default function BetCard({ data, setLoading, id }) {
     })
   }, [setShowModal])
 
-  const onChange = (e) => {
+  const onChange = (e, newValue) => {
     setScore((prevState) => ({
       ...prevState,
-      [e.target.id]: e.target.value,
+      [e.target.name]: newValue,
     }))
   }
-
   return (
     <>
       {realMatchResult && showModal && (
@@ -101,29 +102,13 @@ export default function BetCard({ data, setLoading, id }) {
                   src={data.home_team_sm_flag_url}
                   alt='flag'
                 />
-                <input
-                  type='number'
-                  id='home_score'
-                  className={!changeScore ? 'homeScore' : 'editScoreActive'}
-                  disabled={!changeScore}
-                  value={home_score}
-                  maxLength='4'
-                  onChange={onChange}
-                />
+                <Avatar>{home_score}</Avatar>
               </div>
             </div>
             <div className='teamInfoModal'>
               <p className='teamNameModal'>{data.away_team}</p>
               <div className='flagScoreContainerModal'>
-                <input
-                  type='number'
-                  id='away_score'
-                  className={!changeScore ? 'awayScore' : 'editScoreActive'}
-                  disabled={!changeScore}
-                  value={away_score}
-                  maxLength='4'
-                  onChange={onChange}
-                />
+                <Avatar>{away_score}</Avatar>
                 <img
                   className='team_flag_img'
                   src={data.away_team_sm_flag_url}
@@ -131,6 +116,35 @@ export default function BetCard({ data, setLoading, id }) {
                 />
               </div>
             </div>
+          </div>
+          <div className='betCardSlider'>
+            <Box sx={{ width: 120 }}>
+              <Slider
+                style={{ color: '#00cc66' }}
+                aria-label='Score'
+                defaultValue={0}
+                name={'home_score'}
+                valueLabelDisplay='auto'
+                step={1}
+                marks
+                min={0}
+                max={12}
+                onChange={onChange}
+              />
+
+              <Slider
+                style={{ color: '#00cc66' }}
+                aria-label='Score'
+                defaultValue={0}
+                name={'away_score'}
+                valueLabelDisplay='auto'
+                step={1}
+                marks
+                min={0}
+                max={12}
+                onChange={onChange}
+              />
+            </Box>
           </div>
           <div className='betCardButtonContainer'>
             {data.isMatchResultUpdated ? (
@@ -148,26 +162,20 @@ export default function BetCard({ data, setLoading, id }) {
             ) : (
               <button
                 type='button'
-                className='logOut'
-                onClick={() => {
-                  changeScore && updateBet(data.matchTime.seconds)
-                  setChangeScore((prevState) => !prevState)
-                }}
+                className={'logOut'}
+                onClick={() => updateBet(data.matchTime.seconds)}
               >
-                {changeScore ? 'Submit' : 'Edit score '}
+                Submit
               </button>
             )}
-            {changeScore && (
-              <button
-                onClick={() => {
-                  setChangeScore((prevState) => !prevState)
-                }}
-                type='button'
-                className='logOut buttonOutline'
-              >
-                Cancel
-              </button>
-            )}
+
+            <button
+              onClick={() => {}}
+              type='button'
+              className='logOut buttonOutline'
+            >
+              Cancel
+            </button>
           </div>
         </div>
       </div>

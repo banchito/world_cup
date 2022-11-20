@@ -12,6 +12,7 @@ html::-webkit-scrollbar {
   max-width: 750px;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 5rem;
 }
 body {
   font-family: 'Montserrat', sans-serif;
@@ -926,15 +927,21 @@ align-self: center;
   color: #00cc66;
 }
 
+.betCardSlider{
+   display: flex;
+   justify-content: center;
+   align-items: center;
+  flex-direction: column;
+}
+
 .betCardButtonContainer{
   display: flex;
   gap: 1rem;
   margin-top: 1rem;
-  padding: var(--padding);
   padding-top: 0;
-  
   align-items: center;
   justify-content: center;
+ 
 }
 
 

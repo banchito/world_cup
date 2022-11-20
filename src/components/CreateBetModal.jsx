@@ -17,6 +17,9 @@ import { useState } from 'react'
 import { toast } from 'react-toastify'
 import Spinner from '../components/Spinner'
 import { matchResult, isNum } from '../helpers/helperFunctions'
+import Box from '@mui/material/Box'
+import Slider from '@mui/material/Slider'
+import Avatar from '@mui/material/Avatar'
 
 export default function CreateBetModal({
   matchId,
@@ -39,7 +42,6 @@ export default function CreateBetModal({
 }) {
   const [loading, setLoading] = useState(false)
   const [existingBet, setExistingBet] = useState([])
-  const [changeScore, setChangeScore] = useState(false)
   const [score, setScore] = useState({
     home_score: home_team_goals ? home_team_goals : 0,
     away_score: away_team_goals ? away_team_goals : 0,
@@ -51,9 +53,7 @@ export default function CreateBetModal({
     if (time.seconds < today.getTime() / 1000) {
       return toast.error('Bets are closed for this game')
     }
-
     if (!isNum(score.home_score) || !isNum(score.away_score)) {
-      setChangeScore((prevState) => !prevState)
       return toast.error(`provide a valid score`)
     }
     setLoading(true)
@@ -63,7 +63,6 @@ export default function CreateBetModal({
       away_team_id,
       home_team_id
     )
-
     try {
       const betInfo = {
         away_team_id,
@@ -98,7 +97,6 @@ export default function CreateBetModal({
   const submitMatchResult = async () => {
     if (!isAdmin) return toast.error(`No credentials for this task`)
     if (!isNum(score.home_score) || !isNum(score.away_score)) {
-      setChangeScore((prevState) => !prevState)
       return toast.error(`provide a valid score`)
     }
 
@@ -207,10 +205,10 @@ export default function CreateBetModal({
     }
   }
 
-  const onChange = (e) => {
+  const onChange = (e, newValue) => {
     setScore((prevState) => ({
       ...prevState,
-      [e.target.id]: e.target.value,
+      [e.target.name]: newValue,
     }))
   }
 
@@ -238,18 +236,16 @@ export default function CreateBetModal({
 
   const handleClick = () => {
     if (!updateScoreAdmin) {
-      changeScore && submitBet()
-      setChangeScore((prevState) => !prevState)
+      submitBet()
     } else {
-      changeScore && submitMatchResult()
-      setChangeScore((prevState) => !prevState)
+      submitMatchResult()
     }
   }
 
   return (
     <>
-      {' '}
       {loading && <Spinner />}
+
       <div className='backgroundOverlay' onMouseDown={onClose}>
         <div
           className='modalContainer'
@@ -265,86 +261,88 @@ export default function CreateBetModal({
                   : 'Place Your Bet'}
               </div>
             )}
-            <div className='scoreCardBodyModal'>
-              <div className='teamInfoModal'>
-                <p className='teamNameModal'>{home_team}</p>
-                <div className='flagScoreContainerModal'>
-                  <img
-                    className='team_flag_img'
-                    src={home_team_sm_flag_url}
-                    alt='flag'
-                  />
-                  <input
-                    type='number'
-                    id='home_score'
-                    className={!changeScore ? 'homeScore' : 'editScoreActive'}
-                    disabled={!changeScore}
-                    value={
-                      existingBet.length > 0 && !updateScoreAdmin
-                        ? existingBet[0].data.home_team_goals
-                        : home_score
-                    }
-                    maxLength='4'
-                    onChange={onChange}
-                  />
+            {existingBet.length > 0 && !updateScoreAdmin ? (
+              <></>
+            ) : (
+              <div className='scoreCardBodyModal'>
+                <div className='teamInfoModal'>
+                  <p className='teamNameModal'>{home_team}</p>
+                  <div className='flagScoreContainerModal'>
+                    <img
+                      className='team_flag_img'
+                      src={home_team_sm_flag_url}
+                      alt='flag'
+                    />
+                    <Avatar>{home_score}</Avatar>
+                  </div>
+                </div>
+                <div className='teamInfoModal'>
+                  <p className='teamNameModal'>{away_team}</p>
+                  <div className='flagScoreContainerModal'>
+                    <Avatar>{away_score}</Avatar>
+
+                    <img
+                      className='team_flag_img'
+                      src={away_team_sm_flag_url}
+                      alt='flag'
+                    />
+                  </div>
                 </div>
               </div>
-              <div className='teamInfoModal'>
-                <p className='teamNameModal'>{away_team}</p>
-                <div className='flagScoreContainerModal'>
-                  <input
-                    type='number'
-                    id='away_score'
-                    className={!changeScore ? 'awayScore' : 'editScoreActive'}
-                    disabled={!changeScore}
-                    value={
-                      existingBet.length > 0 && !updateScoreAdmin
-                        ? existingBet[0].data.away_team_goals
-                        : away_score
-                    }
-                    maxLength='4'
+            )}
+            {(existingBet.length < 1 || updateScoreAdmin) && (
+              <>
+                <Box sx={{ width: 120 }}>
+                  <Slider
+                    style={{ color: '#00cc66' }}
+                    aria-label='Score'
+                    defaultValue={0}
+                    // value={score}
+                    name={'home_score'}
+                    // getAriaValueText={valuetext}
+                    valueLabelDisplay='auto'
+                    step={1}
+                    marks
+                    min={0}
+                    max={12}
                     onChange={onChange}
                   />
-                  <img
-                    className='team_flag_img'
-                    src={away_team_sm_flag_url}
-                    alt='flag'
+
+                  <Slider
+                    style={{ color: '#00cc66' }}
+                    aria-label='Score'
+                    defaultValue={0}
+                    name={'away_score'}
+                    valueLabelDisplay='auto'
+                    step={1}
+                    marks
+                    min={0}
+                    max={12}
+                    onChange={onChange}
                   />
-                </div>
-              </div>
-            </div>
+                </Box>
+              </>
+            )}
+
             <div className='betCardButtonContainer'>
               {existingBet.length > 0 && !updateScoreAdmin ? (
-                <>
-                  <Link type='button' className='logOut' to='/profile'>
-                    {'To Profile'}
-                  </Link>
-                  <button
-                    onClick={() => {
-                      onClose()
-                    }}
-                    type='button'
-                    className='logOut buttonOutline'
-                  >
-                    Cancel
-                  </button>
-                </>
+                <Link type='button' className='logOut' to='/profile'>
+                  {'To Profile'}
+                </Link>
               ) : (
                 <button type='button' className='logOut' onClick={handleClick}>
-                  {changeScore ? 'Submit' : 'Edit score '}
+                  Submit
                 </button>
               )}
-              {changeScore && (
-                <button
-                  onClick={() => {
-                    setChangeScore((prevState) => !prevState)
-                  }}
-                  type='button'
-                  className='logOut buttonOutline'
-                >
-                  Cancel
-                </button>
-              )}
+              <button
+                onClick={() => {
+                  onClose()
+                }}
+                type='button'
+                className='logOut buttonOutline'
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>
