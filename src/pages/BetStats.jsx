@@ -21,7 +21,7 @@ function Users(){
       try {
         const usersRef = collection(db, 'users')
 
-        const q = query(usersRef, orderBy('points', 'desc'), limit(10)) 
+        const q = query(usersRef, orderBy('points', 'desc')) 
 
         const querySnap = await getDocs(q)
 
