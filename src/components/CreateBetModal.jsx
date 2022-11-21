@@ -93,7 +93,8 @@ export default function CreateBetModal({
       toast.error(`could not save bet`)
     }
   }
-  //Update mtch result
+
+  //Update match result
   const submitMatchResult = async () => {
     if (!isAdmin) return toast.error(`No credentials for this task`)
     if (!isNum(score.home_score) || !isNum(score.away_score)) {
@@ -114,6 +115,7 @@ export default function CreateBetModal({
       is_draw: result.is_draw,
       winner: result.winner,
       loser: result.loser,
+      match_finished: true,
       updateTimeStamp: serverTimestamp(),
     }
 

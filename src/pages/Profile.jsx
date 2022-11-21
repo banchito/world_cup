@@ -177,7 +177,9 @@ function Profile() {
           )}
 
           <div className='editBetSection'>
-            <p className='personalDetailsText'>My Bets</p>
+            <p className='personalDetailsText'>
+              {`My Bets: ${userBets.length} / 48`}
+            </p>
             <span className='personalDetailsText'>
               {userPoints.points
                 ? `Current Total Points: ${userPoints.points}`

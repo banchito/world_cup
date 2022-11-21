@@ -161,7 +161,7 @@ export default function BetCard({ data, setLoading, id }) {
                  })
                }}
              >
-               See Match Result
+               Match Result
              </button>
            ) : (
              <button

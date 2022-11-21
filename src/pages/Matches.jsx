@@ -4,6 +4,7 @@ import {
   getDocs,
   query,
   orderBy,
+  where,
   limit,
   startAfter,
 } from 'firebase/firestore'
@@ -28,7 +29,12 @@ export default function Matches() {
         const matchesRef = collection(db, 'matches')
 
         //create query
-        const q = query(matchesRef, orderBy('time'), limit(10))
+        const q = query(
+          matchesRef,
+          where('match_finished', '==', false),
+          orderBy('time'),
+          limit(10)
+        )
 
         //execute query
         const querySnap = await getDocs(q)
@@ -43,6 +49,7 @@ export default function Matches() {
         setMatches(matches)
         setLoading(false)
       } catch (error) {
+        console.log(error)
         toast.error('could not fetch matches')
       }
     }
