@@ -91,7 +91,7 @@ export default function BetCard({ data, setLoading, id }) {
       )}
       <Accordion>
         <AccordionSummary
-          expandIcon={<FaChevronDown />}
+          expandIcon={<FaChevronDown style={{ margin: '.5rem' }} />}
           aria-controls='panel1a-content'
           id='panel1a-header'
         >
