@@ -461,6 +461,7 @@ button {
 .scoreCardHeaderUpdate{
 justify-content: center;
   flex-wrap: wrap;
+  font-weight: 600;
 }
 
 @media (max-width: 280px) {
@@ -668,6 +669,7 @@ text-align: end;
 
 .teamNameModal{
 align-self: center;
+font-weight: 600;
 }
 
 .flagScoreContainerModal{
@@ -967,6 +969,7 @@ align-self: center;
 
 .personalDetailsText {
   font-weight: 600;
+  margin-bottom: 1rem;
 }
 
 .changePersonalDetails {
