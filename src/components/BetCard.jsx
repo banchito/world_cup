@@ -7,6 +7,7 @@ import MatchResultModal from './MatchResultModal'
 import { fetchMatchResults } from '../Context/UserActions'
 import Accordion from '@mui/material/Accordion'
 import AccordionSummary from '@mui/material/AccordionSummary'
+import AccordionDetails from '@mui/material/AccordionDetails'
 import { FaChevronDown } from 'react-icons/fa'
 
 import Box from '@mui/material/Box'
@@ -92,18 +93,23 @@ export default function BetCard({ data, setLoading, id }) {
       <Accordion>
         <AccordionSummary
           expandIcon={<FaChevronDown style={{ margin: '.5rem' }} />}
-          aria-controls='panel1a-content'
-          id='panel1a-header'
         >
           <div className='scoreCardHeader scoreCardHeaderUpdate '>
-            {data.isMatchResultUpdated
-              ? `You Obtained ${data.points_won} Points From This Bet`
-              : `Edit Bet Before ${matchDate}`}
+            {data.isMatchResultUpdated ? (
+              <div>
+                <span>You Won {data.points_won} </span>
+                <span>Points From This Bet.</span>
+              </div>
+            ) : (
+              <div>
+                {' '}
+                <span>Edit Before</span> <span>{matchDate}</span>
+              </div>
+            )}
           </div>
         </AccordionSummary>
-        <div className='scoreGrid'>
-          {/* className='adminCard' */}
-          <div>
+        <AccordionDetails>
+          <div className='scoreGrid'>
             <div className='scoreCardBody'>
               <div className='teamInfoModal'>
                 <p className='teamNameModal'>{data.home_team}</p>
@@ -188,22 +194,9 @@ export default function BetCard({ data, setLoading, id }) {
                   Submit
                 </button>
               )}
-
-              {/* <button
-                onClick={() => {
-                  setScore({
-                    home_score: data.home_team_goals,
-                    away_score: data.away_team_goals,
-                  })
-                }}
-                type='button'
-                className='logOut buttonOutline'
-              >
-                Cancel
-              </button> */}
             </div>
           </div>
-        </div>
+        </AccordionDetails>
       </Accordion>
     </>
   )
