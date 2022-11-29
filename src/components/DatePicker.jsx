@@ -12,14 +12,12 @@ function DatePicker({ setFormData }) {
       ...prevState,
       time: value ? value.$d : null,
     }))
-  }, [value])
+  }, [value, setFormData])
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DateTimePicker
-        renderInput={(props) => (
-          <TextField sx={{ width: 250, margin: '1rem' }} {...props} />
-        )}
+        renderInput={(props) => <TextField sx={{ width: 250 }} {...props} />}
         label='Date & Time'
         value={value}
         onChange={(newValue) => {

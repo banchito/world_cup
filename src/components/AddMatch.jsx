@@ -10,7 +10,7 @@ import {
   capitalizeFirstLetter,
   dateIsValid,
 } from '../helpers/helperFunctions.js'
-//Todo implement groups
+
 function AddMatch() {
   const [loading, setLoading] = useState(false)
   const [teams, setTeams] = useState(null)
@@ -20,8 +20,11 @@ function AddMatch() {
     winner: '',
     away_team_goals: 0,
     home_team_goals: 0,
+    round: '',
+    match_finished: false,
   })
-
+  const rounds = ['16', 'Quarter-finals', 'Semi-finals', 'third place', 'final']
+  console.log(formData)
   const onSubmitAdmin = async (e) => {
     if (!formData.away_team_id || !formData.home_team_id || !formData.time)
       return toast.error(`provide all team's info`)
@@ -29,10 +32,6 @@ function AddMatch() {
     e.preventDefault()
     setLoading(true)
     try {
-      formData.group =
-        formData.away_team_group === formData.home_team_group
-          ? formData.home_team_group
-          : ''
       await addDoc(collection(db, 'matches'), formData)
       setLoading(false)
       toast.success('Match saved')
@@ -42,6 +41,8 @@ function AddMatch() {
         winner: '',
         away_team_goals: 0,
         home_team_goals: 0,
+        round: '',
+        match_finished: false,
       })
     } catch (error) {
       toast.error('Could not add new team')
@@ -99,7 +100,7 @@ function AddMatch() {
           <Autocomplete
             id='home_team'
             options={teams ? teams : []}
-            sx={{ width: 245, margin: '1rem' }}
+            sx={{ width: 245 }}
             renderInput={(params) => (
               <TextField {...params} label='Home Team' />
             )}
@@ -140,25 +141,40 @@ function AddMatch() {
             }
           />
 
+          <Autocomplete
+            id='round'
+            options={rounds}
+            sx={{ width: 245 }}
+            renderInput={(params) => <TextField {...params} label='Round' />}
+            isOptionEqualToValue={(option, value) => option === value}
+            onChange={(_, roundSelected) =>
+              setFormData((prevState) => ({
+                ...prevState,
+                round: roundSelected ? roundSelected : null,
+              }))
+            }
+          />
+
           <DatePicker setFormData={setFormData} />
+
+          <button
+            onClick={onSubmitAdmin}
+            disabled={
+              !formData.home_team_id ||
+              !formData.away_team_id ||
+              dateIsValid(formData.time) === false
+            }
+            className={
+              formData.home_team_id &&
+              formData.away_team_id &&
+              dateIsValid(formData.time) === true
+                ? 'submit'
+                : 'submitDisabled'
+            }
+          >
+            Submit
+          </button>
         </form>
-        <button
-          onClick={onSubmitAdmin}
-          disabled={
-            !formData.home_team_id ||
-            !formData.away_team_id ||
-            dateIsValid(formData.time) === false
-          }
-          className={
-            formData.home_team_id &&
-            formData.away_team_id &&
-            dateIsValid(formData.time) === true
-              ? 'submit'
-              : 'submitDisabled'
-          }
-        >
-          Submit
-        </button>
       </div>
     </>
   )

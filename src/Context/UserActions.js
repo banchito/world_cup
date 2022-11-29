@@ -12,7 +12,11 @@ import {
 export const fetchUserBets = async (uid) => {
   try {
     const betsRef = collection(db, 'user_bet')
-    const q = query(betsRef, where('userId', '==', uid), orderBy('timestamp'))
+    const q = query(
+      betsRef,
+      where('userId', '==', uid),
+      orderBy('timestamp', 'desc')
+    )
     const querySnap = await getDocs(q)
     const bets = []
     querySnap.forEach((doc) => {

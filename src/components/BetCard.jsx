@@ -97,8 +97,8 @@ export default function BetCard({ data, setLoading, id }) {
           <div className='scoreCardHeader scoreCardHeaderUpdate '>
             {data.isMatchResultUpdated ? (
               <div>
-                <span>You Won {data.points_won} </span>
-                <span>Points From This Bet.</span>
+                <span>You Won {data.points_won} Points </span>
+                {/* <span>Points From This Bet.</span> */}
               </div>
             ) : (
               <div>
