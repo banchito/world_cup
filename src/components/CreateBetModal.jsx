@@ -16,6 +16,7 @@ import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import Spinner from '../components/Spinner'
+import RadioPenalty from './RadioPenalty'
 import { matchResult, isNum } from '../helpers/helperFunctions'
 import Box from '@mui/material/Box'
 import Slider from '@mui/material/Slider'
@@ -36,6 +37,7 @@ export default function CreateBetModal({
     home_team_goals,
     home_team_sm_flag_url,
     userId,
+    round,
     time,
     email,
   },
@@ -46,7 +48,11 @@ export default function CreateBetModal({
     home_score: home_team_goals ? home_team_goals : 0,
     away_score: away_team_goals ? away_team_goals : 0,
   })
+  const [penaltyWinner, setPenaltyWinner] = useState({
+    pkWinner: 'none',
+  })
   const { home_score, away_score } = score
+  const { pkWinner } = penaltyWinner
 
   const submitBet = async () => {
     const today = new Date()
@@ -80,14 +86,16 @@ export default function CreateBetModal({
         matchId,
         userId,
         email,
+        pkWinner,
         isMatchResultUpdated: false,
         matchTime: time,
         timestamp: serverTimestamp(),
       }
-      await addDoc(collection(db, 'user_bet'), betInfo)
+      console.log(betInfo)
+      // await addDoc(collection(db, 'user_bet'), betInfo)
       setLoading(false)
-      toast.success('Bet Saved')
-      onClose()
+      // toast.success('Bet Saved')
+      // onClose()
     } catch (error) {
       console.log(error)
       toast.error(`could not save bet`)
@@ -115,91 +123,115 @@ export default function CreateBetModal({
       is_draw: result.is_draw,
       winner: result.winner,
       loser: result.loser,
+      pkWinner: home_score !== away_score ? 'none' : pkWinner,
       match_finished: true,
       updateTimeStamp: serverTimestamp(),
     }
-
+    console.log(matchResultInfo)
     try {
       //update match result
-      const matchRef = doc(db, 'matches', matchId)
-      await updateDoc(matchRef, matchResultInfo)
+      // const matchRef = doc(db, 'matches', matchId)
+      // await updateDoc(matchRef, matchResultInfo)
 
       //update all bets for this match and user points
-      const betsRef = collection(db, 'user_bet')
-      const q = query(betsRef, where('matchId', '==', matchId))
-      const querySnap = await getDocs(q)
-      const bets = []
+      // const betsRef = collection(db, 'user_bet')
+      // const q = query(betsRef, where('matchId', '==', matchId))
+      // const querySnap = await getDocs(q)
+      // const bets = []
 
-      querySnap.forEach((doc) => {
-        return bets.push({
-          id: doc.id,
-          data: doc.data(),
-        })
-      })
+      // querySnap.forEach((doc) => {
+      //   return bets.push({
+      //     id: doc.id,
+      //     data: doc.data(),
+      //   })
+      // })
 
+      //1 pointer array
+      let betsWithtOnePoint = []
       //2 pointer array
-      let betsWithTwoPoints = []
+      // let betsWithTwoPoints = []
       //3 pointer array
-      let betsWithtThreePoints = []
+      // let betsWithtThreePoints = []
 
-      betsWithTwoPoints = await bets.filter((doc) => {
-        return (
-          doc.data.is_draw === matchResultInfo.is_draw &&
-          doc.data.winner === matchResultInfo.winner &&
-          doc.data.loser === matchResultInfo.loser &&
-          (doc.data.away_team_goals !== matchResultInfo.away_team_goals ||
-            doc.data.home_team_goals !== matchResultInfo.home_team_goals)
-        )
-      })
+      // betsWithTwoPoints = await bets.filter((doc) => {
+      //   return (
+      //     doc.data.is_draw === matchResultInfo.is_draw &&
+      //     doc.data.winner === matchResultInfo.winner &&
+      //     doc.data.loser === matchResultInfo.loser &&
+      //     (doc.data.away_team_goals !== matchResultInfo.away_team_goals ||
+      //       doc.data.home_team_goals !== matchResultInfo.home_team_goals)
+      //   )
+      // })
 
-      betsWithtThreePoints = bets.filter((doc) => {
-        return (
-          doc.data.away_team_goals === matchResultInfo.away_team_goals &&
-          doc.data.home_team_goals === matchResultInfo.home_team_goals
-        )
-      })
+      // betsWithtThreePoints = bets.filter((doc) => {
+      //   return (
+      //     doc.data.away_team_goals === matchResultInfo.away_team_goals &&
+      //     doc.data.home_team_goals === matchResultInfo.home_team_goals
+      //   )
+      // })
 
-      const batch = writeBatch(db)
+      // betsWithtOnePoint = bets.filter((doc) => {
+      //   return (
+      //     doc.data.pkWinner !== 'none' && matchResultInfo.pkWinner !== 'none' &&
+      //     doc.data.pkWinner === matchResultInfo.pkWinner
+      //   )
+      // })
 
-      Promise.all([
-        betsWithTwoPoints.map(async (bet) => {
-          const docRef = doc(db, 'user_bet', bet.id)
-          return await batch.update(docRef, {
-            points_won: 2,
-            isMatchResultUpdated: true,
-          })
-        }),
-        betsWithTwoPoints.map(async (bet) => {
-          const docRef = doc(db, 'users', bet.data.userId)
-          return await batch.update(docRef, {
-            points: increment(2),
-          })
-        }),
-        betsWithtThreePoints.map(async (bet) => {
-          const docRef = doc(db, 'user_bet', bet.id)
-          return batch.update(docRef, {
-            points_won: 3,
-            isMatchResultUpdated: true,
-          })
-        }),
-        betsWithtThreePoints.map(async (bet) => {
-          const docRef = doc(db, 'users', bet.data.userId)
-          return await batch.update(docRef, {
-            points: increment(3),
-          })
-        }),
-        bets.map(async (bet) => {
-          const docRef = doc(db, 'user_bet', bet.id)
-          return batch.update(docRef, {
-            isMatchResultUpdated: true,
-          })
-        }),
-      ])
+      // const batch = writeBatch(db)
 
-      await batch.commit()
+      // Promise.all([
+      // betsWithtOnePoint.map(async (bet) => {
+      //   const docRef = doc(db, 'user_bet', bet.id)
+      //   return await batch.update(docRef, {
+      //     points_won: increment(1),
+      //     isMatchResultUpdated: true,
+      //   })
+      // })
+      // betsWithtOnePoint.map(async (bet) => {
+      //   const docRef = doc(db, 'users', bet.data.userId)
+      //   return await batch.update(docRef, {
+      //     points: increment(1),
+      //   })
+      // })
+      //   betsWithTwoPoints.map(async (bet) => {
+      //     const docRef = doc(db, 'user_bet', bet.id)
+      //     return await batch.update(docRef, {
+      //       points_won: increment(2),
+      //       isMatchResultUpdated: true,
+      //     })
+      //   }),
+      //   betsWithTwoPoints.map(async (bet) => {
+      //     const docRef = doc(db, 'users', bet.data.userId)
+      //     return await batch.update(docRef, {
+      //       points: increment(2),
+      //     })
+      //   }),
+      //   betsWithtThreePoints.map(async (bet) => {
+      //     const docRef = doc(db, 'user_bet', bet.id)
+      //     return batch.update(docRef, {
+      //       points_won: increment(3),
+      //       isMatchResultUpdated: true,
+      //     })
+      //   }),
+      //   betsWithtThreePoints.map(async (bet) => {
+      //     const docRef = doc(db, 'users', bet.data.userId)
+      //     return await batch.update(docRef, {
+      //       points: increment(3),
+      //     })
+      //   }),
+      //   bets.map(async (bet) => {
+      //     const docRef = doc(db, 'user_bet', bet.id)
+      //     return batch.update(docRef, {
+      //       isMatchResultUpdated: true,
+      //     })
+      //   }),
+      // ])
+
+      // await batch.commit()
 
       setLoading(false)
-      toast.success('Match Result Updated')
+      // toast.success('Match Result Updated')
+      //onClose()
     } catch (error) {
       console.log(error)
       setLoading(false)
@@ -212,6 +244,10 @@ export default function CreateBetModal({
       ...prevState,
       [e.target.name]: newValue,
     }))
+  }
+
+  const onChangePenaltyWinner = (e) => {
+    setPenaltyWinner({ pkWinner: e.target.value })
   }
 
   useEffect(() => {
@@ -247,7 +283,6 @@ export default function CreateBetModal({
   return (
     <>
       {loading && <Spinner />}
-
       <div className='backgroundOverlay' onMouseDown={onClose}>
         <div
           className='modalContainer'
@@ -282,7 +317,6 @@ export default function CreateBetModal({
                   <p className='teamNameModal'>{away_team}</p>
                   <div className='flagScoreContainerModal'>
                     <Avatar>{away_score}</Avatar>
-
                     <img
                       className='team_flag_img'
                       src={away_team_sm_flag_url}
@@ -321,6 +355,25 @@ export default function CreateBetModal({
                     onChange={onChange}
                   />
                 </Box>
+                {round && (
+                  <>
+                    <span className='scoreCardHeaderModal'>
+                      {updateScoreAdmin
+                        ? `Set Pk Winner`
+                        : `If there is a penalty shoo-tout who wins?`}
+                    </span>
+                    <RadioPenalty
+                      away_team={away_team}
+                      away_team_id={away_team_id}
+                      disabled={updateScoreAdmin && home_score !== away_score}
+                      updateScoreAdmin={updateScoreAdmin}
+                      home_team={home_team}
+                      home_team_id={home_team_id}
+                      pkWinner={pkWinner}
+                      onChangePenaltyWinner={onChangePenaltyWinner}
+                    />
+                  </>
+                )}
               </>
             )}
 

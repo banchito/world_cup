@@ -20,7 +20,7 @@ function AddMatch() {
     winner: '',
     away_team_goals: 0,
     home_team_goals: 0,
-    round: '',
+    round: null,
     match_finished: false,
   })
   const rounds = ['16', 'Quarter-finals', 'Semi-finals', 'third place', 'final']
@@ -41,7 +41,7 @@ function AddMatch() {
         winner: '',
         away_team_goals: 0,
         home_team_goals: 0,
-        round: '',
+        round: null,
         match_finished: false,
       })
     } catch (error) {
