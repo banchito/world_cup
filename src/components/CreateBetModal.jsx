@@ -85,13 +85,14 @@ export default function CreateBetModal({
         points_won: 0,
         matchId,
         userId,
-        round,
+        round: round ? round : 'none',
         email,
         pkWinner,
         isMatchResultUpdated: false,
         matchTime: time,
         timestamp: serverTimestamp(),
       }
+
       await addDoc(collection(db, 'user_bet'), betInfo)
       setLoading(false)
       toast.success('Bet Saved')
