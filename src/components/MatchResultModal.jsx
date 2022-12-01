@@ -1,5 +1,4 @@
 export default function MatchResultModal({ onClose, realMatchResult }) {
-  console.log(realMatchResult)
   return (
     <>
       {' '}
