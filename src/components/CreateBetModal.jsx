@@ -85,6 +85,7 @@ export default function CreateBetModal({
         points_won: 0,
         matchId,
         userId,
+        round,
         email,
         pkWinner,
         isMatchResultUpdated: false,
