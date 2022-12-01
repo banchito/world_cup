@@ -183,6 +183,7 @@ export default function BetCard({ data, setLoading, id }) {
                     />
                   </Box>
                   <>
+                    <p className='teamNameModal'> Choose Penalty Winner</p>
                     {data.round !== 'none' && (
                       <RadioPenalty
                         away_team={data.away_team}
