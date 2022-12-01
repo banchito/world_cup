@@ -11,7 +11,6 @@ export default function RadioPenalty({
   onChangePenaltyWinner,
   pkWinner,
   disabled,
-  updateScoreAdmin,
 }) {
   return (
     <>
@@ -22,7 +21,7 @@ export default function RadioPenalty({
               <Radio
                 style={{
                   color: disabled ? '' : '#00cc66',
-                  marginRight: '.5rem',
+                  marginRight: '1rem',
                 }}
               />
             }
@@ -36,7 +35,7 @@ export default function RadioPenalty({
               <Radio
                 style={{
                   color: disabled ? '' : '#00cc66',
-                  marginLeft: '.5rem',
+                  marginLeft: '1rem',
                 }}
               />
             }
@@ -45,21 +44,6 @@ export default function RadioPenalty({
             id={'pkWinner'}
             labelPlacement='end'
           />
-          {/* {updateScoreAdmin && (
-            <FormControlLabel
-              control={
-                <Radio
-                  style={{
-                    color: disabled ? '' : '#00cc66',
-                  }}
-                />
-              }
-              label={'None'}
-              value={'none'}
-              id={'pkWinner'}
-              labelPlacement='start'
-            />
-          )} */}
         </RadioGroup>
       </FormControl>
     </>

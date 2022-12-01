@@ -1,4 +1,5 @@
 export default function MatchResultModal({ onClose, realMatchResult }) {
+  console.log(realMatchResult)
   return (
     <>
       {' '}
@@ -47,6 +48,14 @@ export default function MatchResultModal({ onClose, realMatchResult }) {
                   />
                 </div>
               </div>
+            </div>
+            <div className='teamNameModal'>
+              {realMatchResult.is_draw &&
+                `Penalty Winner: ${
+                  realMatchResult.pkWinner === realMatchResult.home_team_id
+                    ? realMatchResult.home_team
+                    : realMatchResult.away_team
+                }`}
             </div>
             <div className='betCardButtonContainer'>
               <button

@@ -24,7 +24,7 @@ function AddMatch() {
     match_finished: false,
   })
   const rounds = ['16', 'Quarter-finals', 'Semi-finals', 'third place', 'final']
-  console.log(formData)
+
   const onSubmitAdmin = async (e) => {
     if (!formData.away_team_id || !formData.home_team_id || !formData.time)
       return toast.error(`provide all team's info`)
@@ -45,7 +45,9 @@ function AddMatch() {
         match_finished: false,
       })
     } catch (error) {
-      toast.error('Could not add new team')
+      setLoading(false)
+      console.log(error)
+      toast.error('Could not add new match')
     }
   }
 

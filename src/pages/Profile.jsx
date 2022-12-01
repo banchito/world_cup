@@ -26,7 +26,7 @@ function Profile() {
   const [userPoints, setuserPoints] = useState([])
   const [adminFormData, setAdminFormData] = useState({
     country: '',
-    flag_url: '',
+    sm_flag_url: '',
     group: '',
   })
   const [formData, setFormData] = useState({
@@ -35,7 +35,7 @@ function Profile() {
   })
   const { isAdmin } = useIsAdmin(auth.currentUser.uid)
   const { name, email } = formData
-  const { country, flag_url, group } = adminFormData
+  const { country, sm_flag_url, group } = adminFormData
 
   const navigate = useNavigate()
 
@@ -63,7 +63,7 @@ function Profile() {
   }
 
   const onSubmitAdmin = async (e) => {
-    if (!country || !flag_url || !group)
+    if (!country || !sm_flag_url || !group)
       return toast.error(`provide all team's info`)
     e.preventDefault()
     setLoading(true)
@@ -73,7 +73,7 @@ function Profile() {
       await addDoc(collection(db, 'teams'), formDataCopy)
       setLoading(false)
       toast.success('Team saved')
-      setAdminFormData({ country: '', flag_url: '', group: '' })
+      setAdminFormData({ country: '', sm_flag_url: '', group: '' })
       setAddTeam((prevState) => !prevState)
     } catch (error) {
       toast.error('Could not add new team')
@@ -178,7 +178,7 @@ function Profile() {
 
           <div className='editBetSection'>
             <p className='personalDetailsText'>
-              {`My Bets: ${userBets.length} / 48`}
+              {userBets && `My Bets: ${userBets.length} / 48`}
             </p>
             <span className='personalDetailsText'>
               {userPoints.points
@@ -225,10 +225,10 @@ function Profile() {
                     Flag Url:
                     <input
                       type='text'
-                      id='flag_url'
+                      id='sm_flag_url'
                       className={!addTeam ? 'profileName' : 'profileNameActive'}
                       disabled={!addTeam}
-                      value={flag_url}
+                      value={sm_flag_url}
                       onChange={onChangeAdmin}
                     />
                   </label>
@@ -244,12 +244,14 @@ function Profile() {
                     />
                   </label>
                 </form>
-                {country && flag_url && group && (
+                {country && sm_flag_url && group && (
                   <button
                     onClick={onSubmitAdmin}
                     disabled={!addTeam}
                     className={
-                      country && flag_url && group ? 'submit' : 'submitDisabled'
+                      country && sm_flag_url && group
+                        ? 'submit'
+                        : 'submitDisabled'
                     }
                   >
                     Submit

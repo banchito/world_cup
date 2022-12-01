@@ -23,11 +23,11 @@ function MatchItem({
     away_team_goals,
     away_team_id,
     time,
+    round,
   },
 }) {
   const { loggedIn, checkingStatus } = useAuthStatus()
   const [showModal, setShowModal] = useState(null)
-
   let matchDate = dateToString(time)
 
   const showMatchBet = useCallback(() => {
@@ -75,12 +75,13 @@ function MatchItem({
             userId,
             email,
             time,
+            round,
           }}
         />
       )}
       <div className='scoreCard'>
         <div className='scoreCardHeader'>
-          Group {group}
+          {round ? `Round of ${round}` : `Group: ${group}`}
           <ul className='headerIcons'>
             {isAdmin && (
               <li className='cardHeaderIcons'>
