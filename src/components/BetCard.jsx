@@ -183,7 +183,7 @@ export default function BetCard({ data, setLoading, id }) {
                     />
                   </Box>
                   <>
-                    {data.round && (
+                    {data.round !== 'none' && (
                       <RadioPenalty
                         away_team={data.away_team}
                         away_team_id={data.away_team_id}
