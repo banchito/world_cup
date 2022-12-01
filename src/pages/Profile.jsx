@@ -178,7 +178,7 @@ function Profile() {
 
           <div className='editBetSection'>
             <p className='personalDetailsText'>
-              {userBets && `My Bets: ${userBets.length} / 48`}
+              {userBets && `My Bets: ${userBets.length} / 64`}
             </p>
             <span className='personalDetailsText'>
               {userPoints.points

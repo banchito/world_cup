@@ -92,7 +92,6 @@ export default function CreateBetModal({
         matchTime: time,
         timestamp: serverTimestamp(),
       }
-
       await addDoc(collection(db, 'user_bet'), betInfo)
       setLoading(false)
       toast.success('Bet Saved')
