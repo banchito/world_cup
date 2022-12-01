@@ -27,42 +27,43 @@ export default function BetCard({ data, setLoading, id }) {
   const { home_score, away_score } = score
   const { pkWinner } = penaltyWinner
 
-  let matchDate = dateToString(data.matchTime)
-  const today = new Date()
+let matchDate = dateToString(data.matchTime)
+const today = new Date()
 
-  const updateBet = async (matchDate) => {
-    if (matchDate < today.getTime() / 1000) {
-      return toast.error('Bets are closed for this game')
-    }
-    setLoading(true)
-    const result = matchResult(
-      home_score,
-      away_score,
-      data.away_team_id,
-      data.home_team_id
-    )
-
-    const updatedBetinfo = {
-      away_team_goals: parseInt(away_score),
-      home_team_goals: parseInt(home_score),
-      is_draw: result.is_draw,
-      winner: result.winner,
-      loser: result.loser,
-      pkWinner,
-      updateTimeStamp: serverTimestamp(),
-    }
-    try {
-      const userBetRef = doc(db, 'user_bet', id)
-
-      await updateDoc(userBetRef, updatedBetinfo)
-      setLoading(false)
-      toast.success('Chages saved')
-    } catch (error) {
-      console.log(error)
-      setLoading(false)
-      toast.error('Could not update your bet')
-    }
+const updateBet = async (matchDate) => {
+  if (matchDate < today.getTime() / 1000) {
+    return toast.error('Bets are closed for this game')
   }
+  setLoading(true)
+  const result = matchResult(
+    home_score,
+    away_score,
+    data.away_team_id,
+    data.home_team_id
+  )
+
+  const updatedBetinfo = {
+    away_team_goals: parseInt(away_score),
+    home_team_goals: parseInt(home_score),
+    is_draw: result.is_draw,
+    winner: result.winner,
+    loser: result.loser,
+    pkWinner,
+    updateTimeStamp: serverTimestamp(),
+  }
+  if (!data.round) delete updatedBetinfo.pkWinner
+  try {
+    const userBetRef = doc(db, 'user_bet', id)
+
+    await updateDoc(userBetRef, updatedBetinfo)
+    setLoading(false)
+    toast.success('Chages saved')
+  } catch (error) {
+    console.log(error)
+    setLoading(false)
+    toast.error('Could not update your bet')
+  }
+}
 
   const getRealMatchResults = async (info) => {
     try {
