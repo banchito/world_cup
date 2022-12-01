@@ -183,16 +183,18 @@ export default function BetCard({ data, setLoading, id }) {
                     />
                   </Box>
                   <>
-                    <p className='teamNameModal'> Choose Penalty Winner</p>
                     {data.round !== 'none' && (
-                      <RadioPenalty
-                        away_team={data.away_team}
-                        away_team_id={data.away_team_id}
-                        home_team={data.home_team}
-                        home_team_id={data.home_team_id}
-                        pkWinner={pkWinner}
-                        onChangePenaltyWinner={onChangePenaltyWinner}
-                      />
+                      <>
+                        <p className='teamNameModal'> Choose Penalty Winner</p>
+                        <RadioPenalty
+                          away_team={data.away_team}
+                          away_team_id={data.away_team_id}
+                          home_team={data.home_team}
+                          home_team_id={data.home_team_id}
+                          pkWinner={pkWinner}
+                          onChangePenaltyWinner={onChangePenaltyWinner}
+                        />
+                      </>
                     )}
                   </>
                 </div>
