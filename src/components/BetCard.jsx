@@ -111,7 +111,6 @@ const updateBet = async (matchDate) => {
               {data.isMatchResultUpdated ? (
                 <div>
                   <span>You Won {data.points_won} Points </span>
-                  {/* <span>Points From This Bet.</span> */}
                 </div>
               ) : (
                 <div>
@@ -148,7 +147,16 @@ const updateBet = async (matchDate) => {
                 </div>
               </div>
               {data.matchTime.seconds < today / 1000 ? (
-                <></>
+                <>
+                  <div className='teamInfoModal'>
+                    Penalty Winner
+                    {data.pkWinner && data.pkWinner === data.home_team_id ? (
+                      <span> {data.home_team}</span>
+                    ) : (
+                      <span>{data.away_team}</span>
+                    )}
+                  </div>
+                </>
               ) : (
                 <div className='betCardSlider'>
                   <Box sx={{ width: 200 }}>
